@@ -17,7 +17,7 @@ public class StageManager : MonoBehaviour
         else Destroy(gameObject);
     }
 
-    // Instance가 없으면 자동 생성
+    // 씬 관리 Instance가 없으면 자동 생성
     public static StageManager GetInstance()
     {
         if (Instance == null)
@@ -28,14 +28,14 @@ public class StageManager : MonoBehaviour
         return Instance;
     }
 
-    // StageSelectScene에서 스테이지 선택 시 호출
+    // StageSelectScene에서 스테이지 선택 버튼 클릭 시 호출
     public void SetStage(int stageId)
     {
         CurrentStage = stageId;
         SceneChanger.GetInstance().LoadStage(stageId);
     }
 
-    // 클리어 성공 시 다음 스테이지로
+    // 클리어 성공 시 다음 스테이지로 이동
     public void LoadNextStage()
     {
         if (CurrentStage < TotalStages)
@@ -49,7 +49,8 @@ public class StageManager : MonoBehaviour
         }
     }
 
-    // 클리어 실패 시 시작화면으로
+    // 클리어 실패 시 시작화면으로 이동
+    // TODO: 스테이지 클리어 실패 로직 추가해야  함
     public void LoadStartScene()
     {
         CurrentStage = 0; // 초기화

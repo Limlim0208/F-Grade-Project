@@ -4,13 +4,18 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
 
+    public static GameManager GetInstance()
+    {
+        if (Instance == null)
+        {
+            GameObject obj = new GameObject("GameManager");
+            obj.AddComponent<GameManager>();
+        }
+        return Instance;
+    }
+
     public enum GameState { Playing, Paused, StageClear, GameOver }
     public GameState CurrentState { get; private set; }
-
-    [Header("타이머")]
-    public float timeLimit = 60f;
-    public float TimeRemaining { get; private set; }
-    public bool IsTimerRunning { get; private set; }
 
     void Awake()
     {
@@ -18,41 +23,40 @@ public class GameManager : MonoBehaviour
         else Destroy(gameObject);
     }
 
+    // 플레이 상태 관리 함수들
     public void StartGame()
     {
-        TimeRemaining = timeLimit;
-        IsTimerRunning = true;
+        TimerManager.GetInstance().StartTimer(); // 타이머 시작
         ChangeState(GameState.Playing);
-    }
-
-    void Update()
-    {
-        if (!IsTimerRunning) return;
-        TimeRemaining -= Time.deltaTime;
-
-        if (TimeRemaining <= 0)
-        {
-            TimeRemaining = 0;
-            OnGameOver();
-        }
     }
 
     public void OnStageClear()
     {
-        IsTimerRunning = false;
+        TimerManager.GetInstance().StopTimer(); // 타이머 정지
         ChangeState(GameState.StageClear);
-        StageManager.Instance.LoadNextStage(); // 다음 스테이지로
+        StageManager.GetInstance().LoadNextStage();
     }
 
     public void OnGameOver()
     {
-        IsTimerRunning = false;
+        TimerManager.GetInstance().StopTimer(); // 타이머 정지
         ChangeState(GameState.GameOver);
-        StageManager.Instance.LoadStartScene(); // 시작화면으로
+        StageManager.GetInstance().LoadStartScene();
     }
 
-    public void PauseGame() { IsTimerRunning = false; Time.timeScale = 0; ChangeState(GameState.Paused); }
-    public void ResumeGame() { IsTimerRunning = true; Time.timeScale = 1; ChangeState(GameState.Playing); }
+    public void PauseGame()
+    {
+        TimerManager.GetInstance().PauseTimer(); // 타이머 일시정지
+        Time.timeScale = 0;
+        ChangeState(GameState.Paused);
+    }
+
+    public void ResumeGame()
+    {
+        TimerManager.GetInstance().ResumeTimer(); // 타이머 재개
+        Time.timeScale = 1;
+        ChangeState(GameState.Playing);
+    }
 
     void ChangeState(GameState newState) => CurrentState = newState;
 }

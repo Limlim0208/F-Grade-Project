@@ -1,7 +1,8 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
-public class EscapingButton : MonoBehaviour
+public class EscapingButton : MonoBehaviour, IPointerClickHandler
 {
     [Header("도망 설정")]
     [SerializeField] private float escapeDistance = 150f;  // 이 거리 안에 들어오면 도망
@@ -10,14 +11,30 @@ public class EscapingButton : MonoBehaviour
     private RectTransform rectTransform;
     private Canvas canvas;
     private RectTransform canvasRect;
-   
+    private Vector2 originalPosition; 
+    private bool isCaught = false;
 
     void Start()
     {
         rectTransform = GetComponent<RectTransform>();
         canvas = GetComponentInParent<Canvas>();
         canvasRect = canvas.GetComponent<RectTransform>();
+        originalPosition = rectTransform.anchoredPosition;
 
+        enabled = false;
+    }
+
+    public void StartEscaping()
+    {
+        enabled = true;
+    }
+
+    // 버튼 잡았을 때
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        isCaught = true;
+        enabled = false;
+        rectTransform.anchoredPosition = originalPosition; // 원위치로 복귀
     }
 
     void Update()

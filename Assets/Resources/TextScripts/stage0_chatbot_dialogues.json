@@ -1,0 +1,63 @@
+{
+    "dialogues": [
+        {
+            "id": 0,
+            "text": "0번째 질문",
+            "contentType": "question",
+            "buttons": [
+                { "label": "정답", "type": "correct" },
+                { "label": "오답", "type": "wrong" }
+            ]
+        },
+
+        {
+            "id": 1,
+            "text": "1번째 질문",
+            "contentType": "question",
+            "buttons": [
+                { "label": "정답", "type": "correct" },
+                { "label": "오답", "type": "wrong" }
+            ]
+        },
+
+        {
+            "id": 2,
+            "text": "2번째 질문",
+            "contentType": "question",
+            "buttons": [
+                { "label": "정답", "type": "correct" },
+                { "label": "오답", "type": "wrong" }
+            ]
+        },
+
+        {
+            "id": 3,
+            "text": "3번째 질문",
+            "contentType": "question",
+            "buttons": [
+                { "label": "오답", "type": "wrong" },
+                { "label": "게임오버", "type": "gameOver" }
+            ]
+        },
+        {
+            "id": 4,
+            "text": "4번째 질문",
+            "contentType": "question",
+            "buttons": [{ "label": "정답", "type": "correct" }]
+        },
+
+        {
+            "id": 5,
+            "text": "5번째 질문",
+            "contentType": "scroll",
+            "buttons": [
+                { "label": "(쓸데없는 소리1)", "type": "fake" },
+                { "label": "(쓸데없는 소리2)", "type": "fake" },
+                { "label": "(쓸데없는 소리3)", "type": "fake" },
+                { "label": "(쓸데없는 소리4)", "type": "fake" },
+                { "label": "(쓸데없는 소리5)", "type": "fake" },
+                { "label": "챗봇 끄기", "type": "patternClear" }
+            ]
+        }
+    ]
+}

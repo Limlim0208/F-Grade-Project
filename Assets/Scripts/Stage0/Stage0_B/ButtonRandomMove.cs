@@ -6,7 +6,6 @@ public class ButtonRandomMove : MonoBehaviour, IPointerClickHandler
 {
     [Header("연결 오브젝트")]
     [SerializeField] private RectTransform chatbotButton;
-    [SerializeField] private Image chatbotImage;
 
     [Header("설정")]
     [SerializeField] private int randomMoveCount = 3;
@@ -16,6 +15,7 @@ public class ButtonRandomMove : MonoBehaviour, IPointerClickHandler
     private Canvas canvas;
     private RectTransform canvasRect;
     private Vector2 originalPosition;
+    private CanvasGroup chatbotCanvasGroup;
 
     private int clearClickCount = 0;
     private int chatbotClickCount = 0;
@@ -29,6 +29,10 @@ public class ButtonRandomMove : MonoBehaviour, IPointerClickHandler
         canvas = GetComponentInParent<Canvas>();
         canvasRect = canvas.GetComponent<RectTransform>();
         originalPosition = rectTransform.anchoredPosition;
+
+        chatbotCanvasGroup = chatbotButton.gameObject.GetComponent<CanvasGroup>();
+        if (chatbotCanvasGroup == null)
+            chatbotCanvasGroup = chatbotButton.gameObject.AddComponent<CanvasGroup>();
 
         chatbotButton.GetComponent<Button>().onClick.AddListener(OnChatbotClicked);
     }
@@ -47,7 +51,6 @@ public class ButtonRandomMove : MonoBehaviour, IPointerClickHandler
 
             if (clearClickCount < randomMoveCount)
             {
-                // 랜덤 위치로 이동
                 Vector2 canvasSize = canvasRect.rect.size;
                 Vector2 randomPos = new Vector2(
                     Random.Range(-canvasSize.x * 0.4f, canvasSize.x * 0.4f),
@@ -57,7 +60,6 @@ public class ButtonRandomMove : MonoBehaviour, IPointerClickHandler
             }
             else if (clearClickCount >= randomMoveCount)
             {
-                // ChatbotButton 위치로 이동 - 추후 숨는 위치 수정 예정
                 rectTransform.position = chatbotButton.position;
                 isHiding = true;
                 isActive = false;
@@ -67,16 +69,12 @@ public class ButtonRandomMove : MonoBehaviour, IPointerClickHandler
 
         if (isRevealed)
         {
-            // 원위치로 복귀
             rectTransform.anchoredPosition = originalPosition;
             isRevealed = false;
             chatbotClickCount = 0;
 
-            // ChatbotButton 복구
             chatbotButton.gameObject.SetActive(true);
-            Color c = chatbotImage.color;
-            c.a = 1f;
-            chatbotImage.color = c;
+            chatbotCanvasGroup.alpha = 1f;
         }
     }
 
@@ -86,11 +84,7 @@ public class ButtonRandomMove : MonoBehaviour, IPointerClickHandler
 
         chatbotClickCount++;
         float alpha = 1f - ((float)chatbotClickCount / clicksToDisappear);
-        alpha = Mathf.Clamp01(alpha);
-
-        Color c = chatbotImage.color;
-        c.a = alpha;
-        chatbotImage.color = c;
+        chatbotCanvasGroup.alpha = Mathf.Clamp01(alpha);
 
         if (chatbotClickCount >= clicksToDisappear)
         {

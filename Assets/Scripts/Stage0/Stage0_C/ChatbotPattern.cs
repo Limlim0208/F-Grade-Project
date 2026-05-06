@@ -17,16 +17,35 @@ public class ChatbotPattern : MonoBehaviour
 
     private Vector2 originalPosition;
 
+    // 시퀀스 활성화 여부
+    private bool isActive = false;
+
     void Start()
     {
         speechBubble.SetActive(false);
-        buttonContent.SetActive(true);
+        buttonContent.SetActive(false);
         scrollContent.SetActive(false);
 
         originalPosition = chatbotButton.anchoredPosition;
+    }
 
-        StartCoroutine(MoveChatbot()); // 챗봇 이동
-        ShowSpeechBubble(); // 기본 말풍선 표시
+    // 2026-05-06 수정: LogicTrigger에서 호출
+    public void StartSequence()
+    {
+        isActive = true;
+        StartCoroutine(ChatbotSequence());
+    }
+
+    //  챗봇 이동 → 말풍선 표시  시퀀스 코루틴
+    private IEnumerator ChatbotSequence()
+    {
+        speechBubble.SetActive(false);
+        yield return StartCoroutine(MoveChatbot());
+
+        if (isActive)
+        {
+            ShowSpeechBubble();
+        }
     }
 
     IEnumerator MoveChatbot()
@@ -61,8 +80,11 @@ public class ChatbotPattern : MonoBehaviour
 
     public void ResetChatbot()
     {
+        // 리셋 시 시퀀스 비활성화
+        isActive = false;
+
         speechBubble.SetActive(false);
-        buttonContent.SetActive(true);
+        buttonContent.SetActive(false);
         scrollContent.SetActive(false);
         chatbotButton.anchoredPosition = originalPosition;
     }

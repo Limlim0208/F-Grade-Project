@@ -28,5 +28,7 @@ public class LogicTrigger : MonoBehaviour
         {
             chatbotPattern.StartSequence();
         }
+
+        GetComponent<Button>().interactable = false;
     }
 }

@@ -63,11 +63,25 @@ public class EscapingButton : MonoBehaviour, IPointerClickHandler
     // 캔버스 영역 안으로 위치 제한
     private Vector2 ClampToCanvas(Vector2 pos)
     {
-        Vector2 canvasHalf = canvasRect.sizeDelta * 0.5f;
+        // (260506 수정)월드 좌표 기준으로 버튼 경계 지정
+        Vector3 worldPos = rectTransform.parent.TransformPoint(new Vector3(pos.x, pos.y, 0));
+        Vector2 canvasLocalPos;
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(
+            canvasRect,
+            RectTransformUtility.WorldToScreenPoint(null, worldPos),
+            canvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : Camera.main,
+            out canvasLocalPos
+        );
+
+        Vector2 canvasSize = canvasRect.rect.size;
         Vector2 buttonHalf = rectTransform.sizeDelta * 0.5f;
 
-        pos.x = Mathf.Clamp(pos.x, -canvasHalf.x + buttonHalf.x, canvasHalf.x - buttonHalf.x);
-        pos.y = Mathf.Clamp(pos.y, -canvasHalf.y + buttonHalf.y, canvasHalf.y - buttonHalf.y);
-        return pos;
+        canvasLocalPos.x = Mathf.Clamp(canvasLocalPos.x, -canvasSize.x * 0.5f + buttonHalf.x, canvasSize.x * 0.5f - buttonHalf.x);
+        canvasLocalPos.y = Mathf.Clamp(canvasLocalPos.y, -canvasSize.y * 0.5f + buttonHalf.y, canvasSize.y * 0.5f - buttonHalf.y);
+
+        // 다시 MainPanel 로컬 좌표로 변환 후 반환
+        Vector3 clampedWorld = canvasRect.TransformPoint(new Vector3(canvasLocalPos.x, canvasLocalPos.y, 0));
+        Vector2 result = rectTransform.parent.InverseTransformPoint(clampedWorld);
+        return result;
     }
 }

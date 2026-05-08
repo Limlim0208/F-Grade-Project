@@ -622,9 +622,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7229f1611675b0d449152667cc6f5518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  escapeDistance: 500
-  moveSpeed: 1500
-  damping: 5
+  escapeDistance: 300
+  moveSpeed: 2500
+  damping: 10
 --- !u!114 &129746165
 MonoBehaviour:
   m_ObjectHideFlags: 0

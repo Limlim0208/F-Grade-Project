@@ -17,7 +17,6 @@ public class EscapingButton : MonoBehaviour, IPointerClickHandler
     private Vector2 velocity;           // 현재 속도
     private bool isMoving = false;      // 이동 중인지
     private bool isCaught = false;
-    private bool mouseWasNear = false;
 
     void Start()
     {
@@ -75,11 +74,6 @@ public class EscapingButton : MonoBehaviour, IPointerClickHandler
                 velocity = (targetPos - buttonPos).normalized * moveSpeed;
                 isMoving = true;
             }
-            mouseWasNear = true;
-        }
-        else
-        {
-            mouseWasNear = false; // 범위 벗어나면 초기화
         }
 
         if (isMoving)
@@ -102,18 +96,32 @@ public class EscapingButton : MonoBehaviour, IPointerClickHandler
 
     private Vector2 GetRandomCanvasPos()
     {
-        // Canvas 기준 좌표
         Vector2 canvasSize = canvasRect.rect.size;
         Vector2 buttonHalf = rectTransform.sizeDelta * 0.5f;
-
-        Vector2 randomCanvasPos = new Vector2(
-            Random.Range(-canvasSize.x * 0.5f + buttonHalf.x, canvasSize.x * 0.5f - buttonHalf.x),
-            Random.Range(-canvasSize.y * 0.5f + buttonHalf.y, canvasSize.y * 0.5f - buttonHalf.y)
+        Vector2 mousePos;
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(
+            canvasRect,
+            Input.mousePosition,
+            canvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : Camera.main,
+            out mousePos
         );
 
+        Vector2 randomCanvasPos;
+        int maxTry = 20;    // 무한 루프 방지를 위한 횟수 제한
+
+        do
+        {
+            randomCanvasPos = new Vector2(
+                Random.Range(-canvasSize.x * 0.5f + buttonHalf.x, canvasSize.x * 0.5f - buttonHalf.x),
+                Random.Range(-canvasSize.y * 0.5f + buttonHalf.y, canvasSize.y * 0.5f - buttonHalf.y)
+            );
+            maxTry--;
+        }
+        while (Vector2.Distance(randomCanvasPos, mousePos) < escapeDistance * 2f && maxTry > 0);
+        // 마우스에서 escapeDistance*2 이상 떨어진 곳으로만 이동
+
         Vector3 worldPos = canvasRect.TransformPoint(new Vector3(randomCanvasPos.x, randomCanvasPos.y, 0));
-        Vector2 result = rectTransform.parent.InverseTransformPoint(worldPos);
-        return result;
+        return rectTransform.parent.InverseTransformPoint(worldPos);
     }
 
     private Vector2 ClampToCanvas(Vector2 pos)

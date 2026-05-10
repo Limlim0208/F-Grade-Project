@@ -5,13 +5,17 @@ using UnityEngine.EventSystems;
 public class EscapingButton : MonoBehaviour, IPointerClickHandler
 {
     [Header("도망 설정")]
-    [SerializeField] private float escapeDistance = 150f;  // 이 거리 안에 들어오면 도망
-    [SerializeField] private float escapeSpeed = 300f;     // 도망가는 속도
+    [SerializeField] private float escapeDistance = 500f;   // 이 거리 안에 들어오면 도망
+    [SerializeField] private float moveSpeed = 1500f;       // 초기 이동 속도
+    [SerializeField] private float damping = 10f;            // 감속 계수 (클수록 빨리 멈춤)
 
     private RectTransform rectTransform;
     private Canvas canvas;
     private RectTransform canvasRect;
-    private Vector2 originalPosition; 
+    private Vector2 originalPosition;
+    private Vector2 targetPos;          // 목표 랜덤 좌표
+    private Vector2 velocity;           // 현재 속도
+    private bool isMoving = false;      // 이동 중인지
     private bool isCaught = false;
 
     void Start()
@@ -20,27 +24,28 @@ public class EscapingButton : MonoBehaviour, IPointerClickHandler
         canvas = GetComponentInParent<Canvas>();
         canvasRect = canvas.GetComponent<RectTransform>();
         originalPosition = rectTransform.anchoredPosition;
-
+        targetPos = originalPosition;
         enabled = false;
     }
 
     public void StartEscaping()
     {
+        transform.SetAsLastSibling();
+        isCaught = false;
         enabled = true;
     }
 
-    // 버튼 잡았을 때
     public void OnPointerClick(PointerEventData eventData)
     {
         isCaught = true;
         enabled = false;
-        rectTransform.anchoredPosition = originalPosition; // 원위치로 복귀
+        velocity = Vector2.zero;
+        rectTransform.anchoredPosition = originalPosition;
     }
 
     void Update()
     {
         Vector2 mousePos;
-        // 마우스 위치를 캔버스 좌표로 변환
         RectTransformUtility.ScreenPointToLocalPointInRectangle(
             canvasRect,
             Input.mousePosition,
@@ -48,26 +53,95 @@ public class EscapingButton : MonoBehaviour, IPointerClickHandler
             out mousePos
         );
 
+        // MainPanel 로컬 좌표로 변환
         Vector2 buttonPos = rectTransform.anchoredPosition;
-        float distance = Vector2.Distance(mousePos, buttonPos);
+        Vector3 worldPos = rectTransform.parent.TransformPoint(new Vector3(buttonPos.x, buttonPos.y, 0));
+        Vector2 canvasLocalPos;
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(
+            canvasRect,
+            RectTransformUtility.WorldToScreenPoint(null, worldPos),
+            canvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : Camera.main,
+            out canvasLocalPos
+        );
+
+        float distance = Vector2.Distance(mousePos, canvasLocalPos);
 
         if (distance < escapeDistance)
         {
-            // 마우스 반대 방향으로 도망
-            Vector2 escapeDir = (buttonPos - mousePos).normalized;
-            Vector2 newPos = buttonPos + escapeDir * escapeSpeed * Time.deltaTime;
-            rectTransform.anchoredPosition = ClampToCanvas(newPos);
+            if (!isMoving) 
+            {
+                targetPos = GetRandomCanvasPos();
+                velocity = (targetPos - buttonPos).normalized * moveSpeed;
+                isMoving = true;
+            }
+        }
+
+        if (isMoving)
+        {
+            // 감속하면서 목표 위치로 이동
+            velocity = Vector2.Lerp(velocity, Vector2.zero, damping * Time.deltaTime);
+            Vector2 newPos = buttonPos + velocity * Time.deltaTime;
+            newPos = ClampToCanvas(newPos);
+            rectTransform.anchoredPosition = newPos;
+
+            // 목표 위치 근처에 도달하면 멈춤
+            if (Vector2.Distance(newPos, targetPos) < 10f || velocity.magnitude < 10f)
+            {
+
+                isMoving = false;
+                velocity = Vector2.zero;
+            }
         }
     }
 
-    // 캔버스 영역 안으로 위치 제한
+    private Vector2 GetRandomCanvasPos()
+    {
+        Vector2 canvasSize = canvasRect.rect.size;
+        Vector2 buttonHalf = rectTransform.sizeDelta * 0.5f;
+        Vector2 mousePos;
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(
+            canvasRect,
+            Input.mousePosition,
+            canvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : Camera.main,
+            out mousePos
+        );
+
+        Vector2 randomCanvasPos;
+        int maxTry = 20;    // 무한 루프 방지를 위한 횟수 제한
+
+        do
+        {
+            randomCanvasPos = new Vector2(
+                Random.Range(-canvasSize.x * 0.5f + buttonHalf.x, canvasSize.x * 0.5f - buttonHalf.x),
+                Random.Range(-canvasSize.y * 0.5f + buttonHalf.y, canvasSize.y * 0.5f - buttonHalf.y)
+            );
+            maxTry--;
+        }
+        while (Vector2.Distance(randomCanvasPos, mousePos) < escapeDistance * 2f && maxTry > 0);
+        // 마우스에서 escapeDistance*2 이상 떨어진 곳으로만 이동
+
+        Vector3 worldPos = canvasRect.TransformPoint(new Vector3(randomCanvasPos.x, randomCanvasPos.y, 0));
+        return rectTransform.parent.InverseTransformPoint(worldPos);
+    }
+
     private Vector2 ClampToCanvas(Vector2 pos)
     {
-        Vector2 canvasHalf = canvasRect.sizeDelta * 0.5f;
+        Vector3 worldPos = rectTransform.parent.TransformPoint(new Vector3(pos.x, pos.y, 0));
+        Vector2 canvasLocalPos;
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(
+            canvasRect,
+            RectTransformUtility.WorldToScreenPoint(null, worldPos),
+            canvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : Camera.main,
+            out canvasLocalPos
+        );
+
+        Vector2 canvasSize = canvasRect.rect.size;
         Vector2 buttonHalf = rectTransform.sizeDelta * 0.5f;
 
-        pos.x = Mathf.Clamp(pos.x, -canvasHalf.x + buttonHalf.x, canvasHalf.x - buttonHalf.x);
-        pos.y = Mathf.Clamp(pos.y, -canvasHalf.y + buttonHalf.y, canvasHalf.y - buttonHalf.y);
-        return pos;
+        canvasLocalPos.x = Mathf.Clamp(canvasLocalPos.x, -canvasSize.x * 0.5f + buttonHalf.x, canvasSize.x * 0.5f - buttonHalf.x);
+        canvasLocalPos.y = Mathf.Clamp(canvasLocalPos.y, -canvasSize.y * 0.5f + buttonHalf.y, canvasSize.y * 0.5f - buttonHalf.y);
+
+        Vector3 clampedWorld = canvasRect.TransformPoint(new Vector3(canvasLocalPos.x, canvasLocalPos.y, 0));
+        return rectTransform.parent.InverseTransformPoint(clampedWorld);
     }
 }

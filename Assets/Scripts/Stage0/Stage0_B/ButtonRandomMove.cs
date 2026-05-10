@@ -23,6 +23,8 @@ public class ButtonRandomMove : MonoBehaviour, IPointerClickHandler
     private bool isRevealed = false;
     private bool isActive = false;
 
+    private int originalSiblingIndex;
+
     void Start()
     {
         rectTransform = GetComponent<RectTransform>();
@@ -35,6 +37,8 @@ public class ButtonRandomMove : MonoBehaviour, IPointerClickHandler
             chatbotCanvasGroup = chatbotButton.gameObject.AddComponent<CanvasGroup>();
 
         chatbotButton.GetComponent<Button>().onClick.AddListener(OnChatbotClicked);
+
+        originalSiblingIndex = transform.GetSiblingIndex(); // 우선순위 기억
     }
 
     public void StartSequence()
@@ -51,15 +55,20 @@ public class ButtonRandomMove : MonoBehaviour, IPointerClickHandler
 
             if (clearClickCount < randomMoveCount)
             {
+                transform.SetAsLastSibling(); // 랜덤 좌표로 이동하는 동안 ClearButton이 최상단으로 올라오게 함
                 Vector2 canvasSize = canvasRect.rect.size;
-                Vector2 randomPos = new Vector2(
+                Vector2 randomCanvasPos = new Vector2(
                     Random.Range(-canvasSize.x * 0.4f, canvasSize.x * 0.4f),
                     Random.Range(-canvasSize.y * 0.4f, canvasSize.y * 0.4f)
                 );
-                rectTransform.anchoredPosition = randomPos;
+                // Canvas 좌표 기준
+                Vector3 worldPos = canvasRect.TransformPoint(new Vector3(randomCanvasPos.x, randomCanvasPos.y, 0));
+                Vector2 localPos = rectTransform.parent.InverseTransformPoint(worldPos);
+                rectTransform.anchoredPosition = localPos;
             }
             else if (clearClickCount >= randomMoveCount)
             {
+                transform.SetSiblingIndex(originalSiblingIndex); // 원래 우선순위로 복귀
                 rectTransform.position = chatbotButton.position;
                 isHiding = true;
                 isActive = false;

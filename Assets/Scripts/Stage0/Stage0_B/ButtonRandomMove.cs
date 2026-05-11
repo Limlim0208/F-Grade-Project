@@ -6,7 +6,6 @@ public class ButtonRandomMove : MonoBehaviour, IPointerClickHandler
 {
     [Header("연결 오브젝트")]
     [SerializeField] private RectTransform chatbotButton;
-
     [Header("설정")]
     [SerializeField] private int randomMoveCount = 3;
     [SerializeField] private int clicksToDisappear = 5;
@@ -22,7 +21,6 @@ public class ButtonRandomMove : MonoBehaviour, IPointerClickHandler
     private bool isHiding = false;
     private bool isRevealed = false;
     private bool isActive = false;
-
     private int originalSiblingIndex;
 
     void Start()
@@ -37,7 +35,6 @@ public class ButtonRandomMove : MonoBehaviour, IPointerClickHandler
             chatbotCanvasGroup = chatbotButton.gameObject.AddComponent<CanvasGroup>();
 
         chatbotButton.GetComponent<Button>().onClick.AddListener(OnChatbotClicked);
-
         originalSiblingIndex = transform.GetSiblingIndex(); // 우선순위 기억
     }
 
@@ -56,11 +53,13 @@ public class ButtonRandomMove : MonoBehaviour, IPointerClickHandler
             if (clearClickCount < randomMoveCount)
             {
                 transform.SetAsLastSibling(); // 랜덤 좌표로 이동하는 동안 ClearButton이 최상단으로 올라오게 함
+
                 Vector2 canvasSize = canvasRect.rect.size;
                 Vector2 randomCanvasPos = new Vector2(
                     Random.Range(-canvasSize.x * 0.4f, canvasSize.x * 0.4f),
                     Random.Range(-canvasSize.y * 0.4f, canvasSize.y * 0.4f)
                 );
+
                 // Canvas 좌표 기준
                 Vector3 worldPos = canvasRect.TransformPoint(new Vector3(randomCanvasPos.x, randomCanvasPos.y, 0));
                 Vector2 localPos = rectTransform.parent.InverseTransformPoint(worldPos);
@@ -78,12 +77,8 @@ public class ButtonRandomMove : MonoBehaviour, IPointerClickHandler
 
         if (isRevealed)
         {
-            rectTransform.anchoredPosition = originalPosition;
-            isRevealed = false;
-            chatbotClickCount = 0;
-
-            chatbotButton.gameObject.SetActive(true);
-            chatbotCanvasGroup.alpha = 1f;
+            // 타이머 중지 후 씬 전환
+            GameManager.GetInstance().OnStageClear();
         }
     }
 

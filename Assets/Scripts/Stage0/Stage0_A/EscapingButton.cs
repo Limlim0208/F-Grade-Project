@@ -37,14 +37,24 @@ public class EscapingButton : MonoBehaviour, IPointerClickHandler
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        isCaught = true;
-        enabled = false;
-        velocity = Vector2.zero;
-        rectTransform.anchoredPosition = originalPosition;
+        if (!isCaught)
+        {
+            // 첫 클릭 - 원위치로 복귀
+            isCaught = true;
+            velocity = Vector2.zero;
+            rectTransform.anchoredPosition = originalPosition;
+        }
+        else
+        {
+            // 두 번째 클릭 - 타이머 중지 후 씬 전환
+            GameManager.GetInstance().OnStageClear();
+        }
     }
 
     void Update()
     {
+        if (isCaught) return;
+
         Vector2 mousePos;
         RectTransformUtility.ScreenPointToLocalPointInRectangle(
             canvasRect,

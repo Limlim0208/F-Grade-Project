@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TimerManager : MonoBehaviour
 {
@@ -38,10 +39,16 @@ public class TimerManager : MonoBehaviour
     public void PauseTimer() => IsTimerRunning = false;
     public void ResumeTimer() => IsTimerRunning = true;
 
+    [SerializeField] private Text timerText; // 시간 표시용 텍스트 (민채은 수정)
+
     void Update()
     {
         if (!IsTimerRunning) return;
         TimeRemaining -= Time.deltaTime;
+
+        // 타이머 UI 업데이트 (민채은 수정)
+        if (timerText != null)
+            timerText.text = Mathf.CeilToInt(TimeRemaining) + "초";
 
         if (TimeRemaining <= 0)
         {

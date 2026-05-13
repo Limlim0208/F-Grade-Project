@@ -9,6 +9,7 @@ public class ButtonRandomMove : MonoBehaviour, IPointerClickHandler
     [Header("설정")]
     [SerializeField] private int randomMoveCount = 3;
     [SerializeField] private int clicksToDisappear = 5;
+    [SerializeField] private float timePenalty = 10f; // 감소할 시간
 
     private RectTransform rectTransform;
     private Canvas canvas;
@@ -45,6 +46,34 @@ public class ButtonRandomMove : MonoBehaviour, IPointerClickHandler
         isActive = true;
         clearClickCount = 0;
         isReturnedToOrigin = false;
+    }
+
+    void Update()
+    {
+        // 랜덤 이동 단계일 때만 페널티 적용
+        if (!isActive) return;
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            PointerEventData pointerData = new PointerEventData(EventSystem.current);
+            pointerData.position = Input.mousePosition;
+
+            var results = new System.Collections.Generic.List<RaycastResult>();
+            EventSystem.current.RaycastAll(pointerData, results);
+
+            bool clickedOnClear = false;
+            foreach (var result in results)
+            {
+                if (result.gameObject == gameObject)
+                {
+                    clickedOnClear = true;
+                    break;
+                }
+            }
+
+            if (!clickedOnClear)
+                TimerManager.GetInstance().ReduceTime(timePenalty);
+        }
     }
 
     public void OnPointerClick(PointerEventData eventData)

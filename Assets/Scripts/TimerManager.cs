@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 public class TimerManager : MonoBehaviour
 {
     public static TimerManager Instance { get; private set; }
@@ -20,6 +21,7 @@ public class TimerManager : MonoBehaviour
     {
         if (Instance == null) { Instance = this; DontDestroyOnLoad(gameObject); }
         else Destroy(gameObject);
+        SceneManager.sceneLoaded += OnSceneLoaded; // 씬 로드 이벤트 등록
     }
     void Start()
     {
@@ -54,5 +56,29 @@ public class TimerManager : MonoBehaviour
             StopTimer();
             GameManager.GetInstance().OnGameOver(); // 시간 초과 시 게임오버
         }
+    }
+
+    // 시간 감소 함수 (민채은 수정)
+    public void ReduceTime(float amount)
+    {
+        TimeRemaining = Mathf.Max(0, TimeRemaining - amount);
+    }
+
+    // 씬 로드될 때마다 타이머 초기화 (민채은 수정)
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        StopTimer();
+        // 새 씬에서 timerText 다시 찾기
+        GameObject textObj = GameObject.Find("TimerText"); // TimerText UI 오브젝트 이름
+        if (textObj != null)
+            timerText = textObj.GetComponent<Text>();
+
+        if (timerText != null)
+            timerText.gameObject.SetActive(false);
+    }
+
+    private void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded; // 이벤트 해제
     }
 }

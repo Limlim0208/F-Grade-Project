@@ -21,6 +21,7 @@ public class ButtonRandomMove : MonoBehaviour, IPointerClickHandler
     private bool isHiding = false;
     private bool isRevealed = false;
     private bool isActive = false;
+    private bool isReturnedToOrigin = false;
     private int originalSiblingIndex;
 
     void Start()
@@ -29,6 +30,7 @@ public class ButtonRandomMove : MonoBehaviour, IPointerClickHandler
         canvas = GetComponentInParent<Canvas>();
         canvasRect = canvas.GetComponent<RectTransform>();
         originalPosition = rectTransform.anchoredPosition;
+        isReturnedToOrigin = false;
 
         chatbotCanvasGroup = chatbotButton.gameObject.GetComponent<CanvasGroup>();
         if (chatbotCanvasGroup == null)
@@ -42,6 +44,7 @@ public class ButtonRandomMove : MonoBehaviour, IPointerClickHandler
     {
         isActive = true;
         clearClickCount = 0;
+        isReturnedToOrigin = false;
     }
 
     public void OnPointerClick(PointerEventData eventData)
@@ -77,8 +80,17 @@ public class ButtonRandomMove : MonoBehaviour, IPointerClickHandler
 
         if (isRevealed)
         {
-            // 타이머 중지 후 씬 전환
-            GameManager.GetInstance().OnStageClear();
+            if (!isReturnedToOrigin)
+            {
+                // 첫 클릭 - 원위치로 복귀
+                rectTransform.anchoredPosition = originalPosition;
+                isReturnedToOrigin = true;
+            }
+            else
+            {
+                // 두 번째 클릭 - 스테이지 클리어
+                SceneChanger.GetInstance().LoadScene("StageSelectScene");
+            }
         }
     }
 

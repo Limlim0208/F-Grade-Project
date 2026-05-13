@@ -47,7 +47,7 @@ public class EscapingButton : MonoBehaviour, IPointerClickHandler
         else
         {
             // 두 번째 클릭 - 타이머 중지 후 씬 전환
-            GameManager.GetInstance().OnStageClear();
+            SceneChanger.GetInstance().LoadScene("StageSelectScene");
         }
     }
 

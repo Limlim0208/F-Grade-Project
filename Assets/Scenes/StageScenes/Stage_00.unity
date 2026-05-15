@@ -641,6 +641,7 @@ MonoBehaviour:
   chatbotButton: {fileID: 254912048}
   randomMoveCount: 3
   clicksToDisappear: 5
+  timePenalty: 5
 --- !u!224 &254912048 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4219111972380486036, guid: fd52762baa9e30741af3b9d7d6ca7196, type: 3}
@@ -1239,6 +1240,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -102.94499
       objectReference: {fileID: 0}
+    - target: {fileID: 3741918506956490246, guid: fd52762baa9e30741af3b9d7d6ca7196, type: 3}
+      propertyPath: clearButton
+      value: 
+      objectReference: {fileID: 129746159}
     - target: {fileID: 4219111972380486036, guid: fd52762baa9e30741af3b9d7d6ca7196, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5

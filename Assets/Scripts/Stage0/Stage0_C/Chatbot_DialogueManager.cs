@@ -14,6 +14,9 @@ public class ChatbotManager : MonoBehaviour
     [SerializeField] private Transform buttonContainer;      // ButtonContent
     [SerializeField] private Transform scrollButtonContainer; // ScrollContent 하위 Content
 
+    [Header("클리어 버튼")]
+    [SerializeField] private GameObject clearButton;
+
     private DialogueDatabase database;
     private ChatbotPattern chatbotPattern;
     private int currentIndex = 0;
@@ -159,7 +162,16 @@ public class ChatbotManager : MonoBehaviour
     {
         Destroy(chatbotButton);
         Debug.Log("게임 오버!");
-        return;
+
+        // ClearButton 클릭 시 Stage선택 창 으로 이동 (민채은 수정)
+        if (clearButton != null)
+        {
+            clearButton.GetComponent<UnityEngine.UI.Button>().onClick.RemoveAllListeners();
+            clearButton.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() =>
+            {
+                SceneChanger.GetInstance().LoadScene("StageSelectScene");
+            });
+        }
     }
 
     // 버튼 생성 시 레이아웃 업데이트가 느려 제대로 말풍선이 그려지지 않는 문제를 해결하기 위한 레이아웃 리빌드 함수...

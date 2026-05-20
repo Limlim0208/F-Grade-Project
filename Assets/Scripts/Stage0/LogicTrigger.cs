@@ -14,7 +14,8 @@ public class LogicTrigger : MonoBehaviour
 
     void OnClicked()
     {
-        int rand = Random.Range(0, 3);
+        //int rand = Random.Range(0, 3);
+        int rand = 2; // [테스트] 랜덤 정수 하드코딩 (임유미 추가)
 
         // 로직 랜덤 발생
         if (rand == 0)

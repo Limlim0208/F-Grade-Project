@@ -1,169 +1,155 @@
+ï»¿using System.Collections;
+using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
-using System.Collections.Generic;
 
 public class ChatbotManager : MonoBehaviour
 {
-    [Header("Ãªº¿")]
-    [SerializeField] private GameObject chatbotButton; // Ãªº¿ ¹öÆ° ÀüÃ¼
-    [SerializeField] private TextMeshProUGUI speechBubbleText; // Ãªº¿ ´ë»ç ÅØ½ºÆ® ¿µ¿ª
+    [Header("ì±—ë´‡")]
+    [SerializeField] private GameObject chatbotButton; // ì±—ë´‡ ë²„íŠ¼ ì „ì²´
+    [SerializeField] private TextMeshProUGUI speechBubbleText; // ì±—ë´‡ ëŒ€ì‚¬ í…ìŠ¤íŠ¸ ì˜ì—­
 
-    [Header("¹öÆ°")]
+    [Header("ë²„íŠ¼")]
     [SerializeField] private GameObject buttonPrefab;
     [SerializeField] private Transform buttonContainer;      // ButtonContent
-    [SerializeField] private Transform scrollButtonContainer; // ScrollContent ÇÏÀ§ Content
+    [SerializeField] private Transform scrollButtonContainer; // ScrollContent í•˜ìœ„ Content
 
-    [Header("Å¬¸®¾î ¹öÆ°")]
+    [Header("í…ìŠ¤íŠ¸ ì…ë ¥ì°½")]
+    [SerializeField] private TMP_InputField inputField;
+
+    [Header("í´ë¦¬ì–´ ë²„íŠ¼")]
     [SerializeField] private GameObject clearButton;
 
     private DialogueDatabase database;
     private ChatbotPattern chatbotPattern;
-    private int currentIndex = 0;
+    private Dictionary<int, DialogueEntry> dialogueMap = new Dictionary<int, DialogueEntry>();
 
     void Start()
     {
         chatbotPattern = GetComponent<ChatbotPattern>();
         LoadDialogues();
-        ShowDialogue(0);
+        ShowDialogue(1);
     }
 
     void LoadDialogues()
     {
         TextAsset jsonFile = Resources.Load<TextAsset>("TextScripts/stage0_chatbot_dialogues");
         database = JsonUtility.FromJson<DialogueDatabase>(jsonFile.text);
+
+        foreach (DialogueEntry entry in database.dialogues)
+            dialogueMap[entry.id] = entry;
     }
 
-    public void ShowDialogue(int index)
+    public void ShowDialogue(int id)
     {
-        if (index >= database.dialogues.Count)
+        if (!dialogueMap.TryGetValue(id, out DialogueEntry entry))
         {
-            Debug.Log("´õ ÀÌ»ó ´ë»ç°¡ ¾øÀ½");
+            Debug.LogWarning($"[ChatbotManager] id {id} ì— í•´ë‹¹í•˜ëŠ” ëŒ€í™”ê°€ ì—†ìŠµë‹ˆë‹¤.");
             return;
         }
 
-        currentIndex = index;
-        DialogueEntry entry = database.dialogues[index];
-
-        // ÅØ½ºÆ® ¾÷µ¥ÀÌÆ®
-        speechBubbleText.text = entry.text;
-        // contentType¿¡ µû¶ó ÄÜÅÙÃ÷ ÀüÈ¯
-        if (entry.contentType == "scroll")
-        {
-            chatbotPattern.ShowScrollView();
-            GenerateScrollButtons(entry.buttons);
-        }
+        // textPoolì´ ìˆìœ¼ë©´ ëœë¤ pick, ì—†ìœ¼ë©´ text ì‚¬ìš©
+        if (entry.textPool != null && entry.textPool.Count > 0)
+            speechBubbleText.text = entry.textPool[Random.Range(0, entry.textPool.Count)];
         else
+            speechBubbleText.text = entry.text;
+
+        SetContentUI(entry);
+    }
+
+    // ContentTypeì— ë”°ë¥¸ UI í‘œì‹œ
+    void SetContentUI(DialogueEntry entry)
+    {
+
+        switch (entry.contentType)
         {
-            GenerateButtons(entry.buttons);
+            case "scroll":
+                chatbotPattern.ShowScrollView();
+                GenerateButtons(entry.buttons, scrollButtonContainer);
+                break;
+
+            case "input":
+                chatbotPattern.ShowInputView();
+                if (inputField != null) inputField.text = "";
+                GenerateButtons(entry.buttons, buttonContainer);
+                break;
+
+            default: // null ë˜ëŠ” "question"
+                chatbotPattern.ShowSpeechBubble();
+                GenerateButtons(entry.buttons, buttonContainer);
+                break;
         }
     }
-    // ButtonContent ¹öÆ° »ı¼º
-    void GenerateButtons(List<ButtonData> buttons)
+
+    // ButtonContent ë²„íŠ¼ ìƒì„± + ScrollContent ë²„íŠ¼ ìƒì„± í•¨ìˆ˜ ë³‘í•©
+    void GenerateButtons(List<ButtonData> buttons, Transform container)
     {
-        // ±âÁ¸ ¹öÆ° ÀüºÎ »èÁ¦
-        foreach (Transform child in buttonContainer)
+        // ê¸°ì¡´ ë²„íŠ¼ ì „ë¶€ ì‚­ì œ
+        foreach (Transform child in container)
             Destroy(child.gameObject);
 
-        // JSON ¹öÆ° °³¼ö¸¸Å­ ¹öÆ° »ı¼º
+        // JSON ë²„íŠ¼ ê°œìˆ˜ë§Œí¼ ë²„íŠ¼ ìƒì„±
         foreach (ButtonData btn in buttons)
         {
-            GameObject newButton = Instantiate(buttonPrefab, buttonContainer);
+            GameObject newButton = Instantiate(buttonPrefab, container);
 
-            // ¹öÆ° ÅØ½ºÆ® ¼³Á¤
+            // ë²„íŠ¼ í…ìŠ¤íŠ¸ ì„¤ì •
             newButton.GetComponentInChildren<TextMeshProUGUI>().text = btn.label;
 
-            // ¹öÆ° Å¸ÀÔ¿¡ µû¶ó OnClick ¿¬°á
+            // ë²„íŠ¼ íƒ€ì…ì— ë”°ë¼ OnClick ì—°ê²°
             Button buttonComponent = newButton.GetComponent<Button>();
-            string btnType = btn.type; // Å¬·ÎÀú ¹®Á¦ ¹æÁö¿ë ·ÎÄÃ º¯¼ö
+            string btnType = btn.type; // í´ë¡œì € ë¬¸ì œ ë°©ì§€ìš© ë¡œì»¬ ë³€ìˆ˜
+            int nextId = btn.nextId;
 
-            buttonComponent.onClick.AddListener(() =>
+            switch (btnType)
             {
-                if (btnType == "correct")
-                    OnCorrectButtonClicked();
-                else if (btnType == "wrong")
-                    OnWrongButtonClicked();
-                else if (btnType == "patternClear")
-                    OnPatternClearButtonClicked();
-                else if (btnType == "gameOver")
-                    OnGameOverButtonClicked();
-            });
+                case "disabled":
+                    // í´ë¦­ ë¶ˆê°€ ë²„íŠ¼ â€” interactableë§Œ ë„ê³  ë¦¬ìŠ¤ë„ˆ ì—†ìŒ
+                    buttonComponent.interactable = false;
+                    break;
+
+                case "fake":
+                    // ê²½ìœ  ë…¸ë“œë¡œ ì´ë™ (nextId ìˆìœ¼ë©´), ì—†ìœ¼ë©´ Q1ìœ¼ë¡œ
+                    buttonComponent.onClick.AddListener(() =>
+                        ShowDialogue(nextId > 0 ? nextId : 1));
+                    break;
+
+                case "gameOver":
+                    buttonComponent.onClick.AddListener(OnGameOverButtonClicked);
+                    break;
+
+                case "patternClear":
+                    buttonComponent.onClick.AddListener(OnPatternClearButtonClicked);
+                    break;
+
+                default:
+                    // type ì—†ìŒ â€” nextIdë¡œ ì´ë™
+                    if (nextId >= 0)
+                        buttonComponent.onClick.AddListener(() => ShowDialogue(nextId));
+                    else
+                        Debug.LogWarning($"[ChatbotManager] type ì—†ìŒ + nextId {nextId} â€” ì´ë™ ë¶ˆê°€");
+                    break;
+            }
         }
 
-        RebuildLayout(buttonContainer);
-    }
-    // ScrollContent ¹öÆ° »ı¼º
-    void GenerateScrollButtons(List<ButtonData> buttons)
-    {
-        foreach (Transform child in scrollButtonContainer)
-            Destroy(child.gameObject);
-
-        foreach (ButtonData btn in buttons)
-        {
-            GameObject newButton = Instantiate(buttonPrefab, scrollButtonContainer);
-            newButton.GetComponentInChildren<TextMeshProUGUI>().text = btn.label;
-
-            Button buttonComponent = newButton.GetComponent<Button>();
-            string btnType = btn.type;
-
-            buttonComponent.onClick.AddListener(() =>
-            {
-                if (btnType == "fake")
-                    OnFakeButtonClicked();
-                else if (btnType == "patternClear")
-                    OnPatternClearButtonClicked();
-                else if (btnType == "gameOver")
-                    OnGameOverButtonClicked();
-            });
-        }
-
-        RebuildLayout(scrollButtonContainer);
+        StartCoroutine(RebuildLayoutCoroutine(container));
     }
 
-    // ¿À´ä¹öÆ° Å¬¸¯ ½Ã Áú¹® ¹İº¹
-    public void OnWrongButtonClicked()
-    {
-        if (currentIndex < 3)
-            ShowDialogue(currentIndex + 1);
-        else
-            ShowDialogue(0);
-
-    }
-
-    // Á¤´ä¹öÆ° Å¬¸¯ ½Ã ´ÙÀ½ Áú¹® ÆĞÅÏÀ¸·Î ³Ñ¾î°¨
-    public void OnCorrectButtonClicked()
-    {
-        if(currentIndex < 3)
-            ShowDialogue(4);
-        else if (currentIndex >= 4)
-            ShowDialogue(currentIndex + 1);
-    }
-
-    public void OnFakeButtonClicked()
-    {
-        // TODO: ÆäÀÌÅ© ¹öÆ° Å¬¸¯ ½Ã Æ¯Á¤ ½ºÅ©¸³Æ® Ãâ·Â ¿¹Á¤
-        Debug.Log("ÆäÀÌÅ© ¹öÆ° Å¬¸¯");
-    }
-
-
-    // °ÔÀÓ¿À¹ö ¹öÆ° Å¬¸¯ ½Ã °ÔÀÓ¿À¹ö
+    // ê²Œì„ì˜¤ë²„ ë²„íŠ¼ í´ë¦­ ì‹œ ê²Œì„ì˜¤ë²„
     public void OnGameOverButtonClicked()
     {
         GameManager.GetInstance().OnGameOver();
+        Debug.Log("ê²Œì„ ì˜¤ë²„!");
     }
 
-    /*
-    TODO: ÆäÀÌÅ© ¹öÆ° ¸®½ºÆ® ´­·¶À» ¶§ Æ¯Á¤ ½ºÅ©¸³Æ® Ãâ·ÂÇÏµµ·Ï ÄÚµå Ãß°¡ÇØ¾ßÇÔ
-     */
-
-
-    // Ãªº¿ »èÁ¦ ¹öÆ° Å¬¸¯ ½Ã ÆĞÅÏ Å¬¸®¾î
+    // ì±—ë´‡ ì‚­ì œ ë²„íŠ¼ í´ë¦­ ì‹œ íŒ¨í„´ í´ë¦¬ì–´
     public void OnPatternClearButtonClicked()
     {
         Destroy(chatbotButton);
-        Debug.Log("°ÔÀÓ ¿À¹ö!");
+        Debug.Log("íŒ¨í„´ C í´ë¦¬ì–´!");
 
-        // ClearButton Å¬¸¯ ½Ã Stage¼±ÅÃ Ã¢ À¸·Î ÀÌµ¿ (¹ÎÃ¤Àº ¼öÁ¤)
+        // ClearButton í´ë¦­ ì‹œ Stageì„ íƒ ì°½ ìœ¼ë¡œ ì´ë™ (ë¯¼ì±„ì€ ìˆ˜ì •)
         if (clearButton != null)
         {
             clearButton.GetComponent<UnityEngine.UI.Button>().onClick.RemoveAllListeners();
@@ -174,10 +160,23 @@ public class ChatbotManager : MonoBehaviour
         }
     }
 
-    // ¹öÆ° »ı¼º ½Ã ·¹ÀÌ¾Æ¿ô ¾÷µ¥ÀÌÆ®°¡ ´À·Á Á¦´ë·Î ¸»Ç³¼±ÀÌ ±×·ÁÁöÁö ¾Ê´Â ¹®Á¦¸¦ ÇØ°áÇÏ±â À§ÇÑ ·¹ÀÌ¾Æ¿ô ¸®ºôµå ÇÔ¼ö...
-    void RebuildLayout(Transform container)
+    // ë²„íŠ¼ ìƒì„± ì‹œ ë ˆì´ì•„ì›ƒ ì—…ë°ì´íŠ¸ê°€ ëŠë ¤ ì œëŒ€ë¡œ ë§í’ì„ ì´ ê·¸ë ¤ì§€ì§€ ì•ŠëŠ” ë¬¸ì œë¥¼ í•´ê²°í•˜ê¸° ìœ„í•œ ë ˆì´ì•„ì›ƒ ë¦¬ë¹Œë“œ í•¨ìˆ˜...
+    IEnumerator RebuildLayoutCoroutine(Transform container)
     {
+        // 1í”„ë ˆì„ ëŒ€ê¸° í›„ ë¦¬ë¹Œë“œ (SetActive ì§í›„ ë ˆì´ì•„ì›ƒ ê³„ì‚° íƒ€ì´ë° ë¬¸ì œ í•´ê²°)
+        yield return null;
         LayoutRebuilder.ForceRebuildLayoutImmediate(container.GetComponent<RectTransform>());
+
+        // ë¶€ëª¨ê¹Œì§€ í•œ ë²ˆ ë” ë¦¬ë¹Œë“œ
+        if (container.parent != null)
+            LayoutRebuilder.ForceRebuildLayoutImmediate(container.parent.GetComponent<RectTransform>());
+
+        yield return null;
+
+        // SpeechBubble ìµœìƒìœ„ê¹Œì§€ ë¦¬ë¹Œë“œ
+        Transform root = container.parent?.parent;
+        if (root != null)
+            LayoutRebuilder.ForceRebuildLayoutImmediate(root.GetComponent<RectTransform>());
     }
 
 }

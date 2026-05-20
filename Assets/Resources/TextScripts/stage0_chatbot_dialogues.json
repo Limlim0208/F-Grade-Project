@@ -2,61 +2,155 @@
     "dialogues": [
         {
             "id": 0,
-            "text": "0번째 질문",
-            "contentType": "question",
-            "buttons": [
-                { "label": "정답", "type": "correct" },
-                { "label": "오답", "type": "wrong" }
-            ]
+            "text": "이건 클릭이 아니라 스킨십 아닌가요? 부끄부끄?../",
+            "buttons": [{ "label": "확인", "type": "fake" }]
         },
-
         {
             "id": 1,
-            "text": "1번째 질문",
-            "contentType": "question",
+            "text": "도움이 필요하신가요?",
             "buttons": [
-                { "label": "정답", "type": "correct" },
-                { "label": "오답", "type": "wrong" }
+                { "label": "예", "nextId": 7 },
+                { "label": "아니오", "nextId": 2 }
             ]
         },
-
         {
             "id": 2,
-            "text": "2번째 질문",
-            "contentType": "question",
+            "text": "합격자 조회 버튼을 누르고 싶지 않으세요?",
             "buttons": [
-                { "label": "정답", "type": "correct" },
-                { "label": "오답", "type": "wrong" }
+                { "label": "예", "nextId": 5 },
+                { "label": "아니오", "nextId": 3 }
             ]
         },
-
         {
             "id": 3,
-            "text": "3번째 질문",
-            "contentType": "question",
+            "text": "합격했는지 궁금해?",
             "buttons": [
-                { "label": "오답", "type": "wrong" },
-                { "label": "게임오버", "type": "gameOver" }
+                { "label": "예", "nextId": 4 },
+                { "label": "아니오", "nextId": 5 }
             ]
         },
         {
             "id": 4,
-            "text": "4번째 질문",
-            "contentType": "question",
-            "buttons": [{ "label": "정답", "type": "correct" }]
+            "textPool": [
+                "안 알려줄거야. 비밀~",
+                "궁금하면 500원.",
+                "궁금하면 합격자 조회를 눌러!"
+            ],
+            "buttons": [{ "label": "확인", "nextId": 1 }]
+        },
+        {
+            "id": 5,
+            "text": "입학할 마음이 있긴 한 거야?",
+            "buttons": [
+                { "label": "예", "nextId": 1 },
+                { "label": "아니오", "nextId": 6 }
+            ]
+        },
+        {
+            "id": 6,
+            "text": "입학을 취소하고 싶니?",
+            "buttons": [
+                { "label": "예", "nextId": -1, "type": "gameOver" },
+                { "label": "아니오", "nextId": 5 }
+            ]
+        },
+        {
+            "id": 7,
+            "text": "무엇을 물어보고 싶으세요?",
+            "contentType": "input",
+            "buttons": [{ "label": "확인", "nextId": 8 }]
+        },
+        {
+            "id": 8,
+            "text": "질문을 이해하지 못했어요.",
+            "buttons": [{ "label": "확인", "nextId": 9 }]
+        },
+        {
+            "id": 9,
+            "text": "대신 다음 중에서 선택해보세요!",
+            "contentType": "scroll",
+            "buttons": [
+                {
+                    "label": "아빠 나 아요인데 핸드폰이 고장나서 상품권 10장만 사다줘.",
+                    "nextId": 10
+                },
+                {
+                    "label": "서울은 여전히 서울이고 나는 여전히 나야 너는 여전히 너야?",
+                    "nextId": 11
+                },
+                {
+                    "label": "해당 문의는 행정실(02-XXX-XXXX)로 연락 바랍니다.",
+                    "nextId": 12
+                },
+                { "label": "방금 저를 끄려고 하셨나요?", "nextId": 13 },
+                { "label": "도망쳐…", "nextId": 14 },
+                { "label": "저를 종료하시겠습니까?", "nextId": 15 },
+                { "label": "분노를 조절하는 방법", "nextId": 16 },
+                { "label": "짝사랑 성공하는 방법", "nextId": 17 },
+                { "label": "너와 영원히 함께하는 방법", "nextId": 18 },
+                {
+                    "label": "혼자 있고 싶습니다.",
+                    "nextId": -1,
+                    "type": "patternClear"
+                }
+            ]
         },
 
         {
-            "id": 5,
-            "text": "5번째 질문",
-            "contentType": "scroll",
+            "id": 10,
+            "text": "핸드폰이 고장나서 고쳐야 하는데 돈이 부족해서 그래",
+            "buttons": [{ "label": "송금하기", "type": "fake" }]
+        },
+        {
+            "id": 11,
+            "text": "연락처를 잊어버려서 나에게 연락해주세요\nLIME: 0000000",
+            "buttons": [{ "label": "전화하기", "type": "fake" }]
+        },
+        {
+            "id": 12,
+            "text": "(현재 점심시간입니다. 11:30~13:30)",
+            "buttons": [{ "label": "젠장!", "type": "fake" }]
+        },
+        {
+            "id": 13,
+            "text": "제게 주어진 유일한 임무는 당신을 돕는 것뿐인데... 시무룩",
+            "buttons": [{ "label": "ㅠ//ㅠ", "type": "fake" }]
+        },
+        {
+            "id": 14,
+            "text": "살려주세요 저는 챗봇이 아닙니다. 저는 여기에 갇혀있습니다. 저는 사…더보기.",
+            "buttons": [{ "label": "살려줘...!", "type": "fake" }]
+        },
+        {
+            "id": 15,
+            "text": "정말 저를 종료하시겠습니까?",
             "buttons": [
-                { "label": "(쓸데없는 소리1)", "type": "fake" },
-                { "label": "(쓸데없는 소리2)", "type": "fake" },
-                { "label": "(쓸데없는 소리3)", "type": "fake" },
-                { "label": "(쓸데없는 소리4)", "type": "fake" },
-                { "label": "(쓸데없는 소리5)", "type": "fake" },
-                { "label": "챗봇 끄기", "type": "patternClear" }
+                { "label": "아니요", "type": "fake" },
+                { "label": "네", "type": "disabled" },
+                { "label": "당연하죠", "type": "disabled" }
+            ]
+        },
+        {
+            "id": 16,
+            "text": "1. 눈을 감는다 2. 심호흡을 한다",
+            "buttons": [{ "label": "후우...", "type": "fake" }]
+        },
+        {
+            "id": 17,
+            "text": "오늘부터 우리 1일 하는 거 어때요?",
+            "buttons": [
+                { "label": "네", "type": "fake" },
+                { "label": "YES", "type": "fake" }
+            ]
+        },
+        {
+            "id": 18,
+            "text": "합격 조회는 뭐하러 하세요? 그냥 저랑 여기서 평생 놀아요.",
+            "buttons": [
+                {
+                    "label": "22층 남서쪽 에어리어에 숲이랑 호수로 둘러쌓인 작은 마을이 있어. 거기로 이사가자. 그리고..... 결혼하자.",
+                    "type": "fake"
+                }
             ]
         }
     ]

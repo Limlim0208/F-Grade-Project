@@ -100,7 +100,7 @@ public class ButtonRandomMove : MonoBehaviour, IPointerClickHandler
             else if (clearClickCount >= randomMoveCount)
             {
                 transform.SetSiblingIndex(originalSiblingIndex); // 원래 우선순위로 복귀
-                rectTransform.position = chatbotButton.position;
+                rectTransform.position = chatbotButton.position + new Vector3(0, 100f, 0);
                 isHiding = true;
                 isActive = false;
             }

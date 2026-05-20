@@ -17,7 +17,7 @@ public class TimerManager : MonoBehaviour
     public float TimeRemaining { get; private set; }
     public bool IsTimerRunning { get; private set; }
     [SerializeField] private Text timerText; // 시간 표시용 텍스트 (민채은 수정)
-    [SerializeField] private Image timerBar; // 타이머 파 이미지 (민채은 수정)
+    [SerializeField] private Image timerBar; // 타이머 바 이미지 (민채은 수정)
     void Awake()
     {
         if (Instance == null) { Instance = this; DontDestroyOnLoad(gameObject); }
@@ -53,15 +53,24 @@ public class TimerManager : MonoBehaviour
     {
         if (!IsTimerRunning) return;
         TimeRemaining -= Time.deltaTime;
-        // 타이머 UI 업데이트
+
+        if (TimeRemaining <= 0)
+            TimeRemaining = 0; 
+
+        // UI 업데이트
         if (timerText != null)
-            timerText.text = "남은 접속 시간 " + Mathf.CeilToInt(TimeRemaining);
+        {
+            int minutes = Mathf.FloorToInt(TimeRemaining / 60f);
+            int seconds = Mathf.FloorToInt(TimeRemaining % 60f);
+            int milliseconds = Mathf.FloorToInt((TimeRemaining * 100f) % 100f);
+            timerText.text = string.Format("남은 접속 시간 {0:00}:{1:00}:{2:00}", minutes, seconds, milliseconds);
+        }
         UpdateTimerBar();
+
         if (TimeRemaining <= 0)
         {
-            TimeRemaining = 0;
             StopTimer();
-            GameManager.GetInstance().OnGameOver(); // 시간 초과 시 게임오버
+            GameManager.GetInstance().OnGameOver(); // 타이머 시간 종료시 게임 오버
         }
     }
 

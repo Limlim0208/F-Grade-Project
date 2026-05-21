@@ -43,7 +43,7 @@ public class TimerManager : MonoBehaviour
         TimeRemaining = timeLimit;
         IsTimerRunning = true;
 
-        IsTimerRunning = false; // [테스트] 타이머 자동 시작 방지
+        //IsTimerRunning = false; // [테스트] 타이머 자동 시작 방지(임유미 수정)
     }
     public void StopTimer()
     {

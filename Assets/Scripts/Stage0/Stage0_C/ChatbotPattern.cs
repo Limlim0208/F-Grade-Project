@@ -1,5 +1,6 @@
-using UnityEngine;
 using System.Collections;
+using UnityEngine;
+using UnityEngine.UI;
 
 public class ChatbotPattern : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class ChatbotPattern : MonoBehaviour
     [Header("말풍선 콘텐츠")]
     [SerializeField] private GameObject buttonContent;
     [SerializeField] private GameObject scrollContent;
+    [SerializeField] private GameObject inputContent;
 
     [Header("말풍선 이동 설정")]
     [SerializeField] private Vector2 targetPosition;
@@ -69,6 +71,8 @@ public class ChatbotPattern : MonoBehaviour
         speechBubble.SetActive(true);
         buttonContent.SetActive(true);
         scrollContent.SetActive(false);
+        inputContent.SetActive(false);
+        StartCoroutine(RebuildAll());
     }
 
     // ChatbotManager에서 contentType == "scroll"일 때 호출
@@ -76,6 +80,17 @@ public class ChatbotPattern : MonoBehaviour
     {
         buttonContent.SetActive(false);
         scrollContent.SetActive(true);
+        inputContent.SetActive(false);
+        StartCoroutine(RebuildAll());
+    }
+
+    // ChatbotManager에서 contentType == "input"일 때 호출
+    public void ShowInputView()
+    {
+        buttonContent.SetActive(true);
+        scrollContent.SetActive(false);
+        inputContent.SetActive(true);
+        StartCoroutine(RebuildAll());
     }
 
     public void ResetChatbot()
@@ -86,6 +101,16 @@ public class ChatbotPattern : MonoBehaviour
         speechBubble.SetActive(false);
         buttonContent.SetActive(false);
         scrollContent.SetActive(false);
+        inputContent.SetActive(false);
         chatbotButton.anchoredPosition = originalPosition;
+    }
+
+    // UI 리빌드 함수
+    IEnumerator RebuildAll()
+    {
+        yield return null;
+        LayoutRebuilder.ForceRebuildLayoutImmediate(speechBubble.GetComponent<RectTransform>());
+        yield return null;
+        LayoutRebuilder.ForceRebuildLayoutImmediate(speechBubble.GetComponent<RectTransform>());
     }
 }

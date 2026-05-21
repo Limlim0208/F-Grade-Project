@@ -28,20 +28,21 @@ public class GameManager : MonoBehaviour
     {
         TimerManager.GetInstance().StartTimer(); // 타이머 시작
         ChangeState(GameState.Playing);
+        Debug.Log("[GameManager] StartGame → GameState: Playing");
     }
 
     public void OnStageClear()
     {
         TimerManager.GetInstance().StopTimer(); // 타이머 정지
         ChangeState(GameState.StageClear);
-        StageManager.GetInstance().LoadNextStage();
+        Debug.Log("[GameManager] OnStageClear → GameState: StageClear");
     }
 
     public void OnGameOver()
     {
         TimerManager.GetInstance().StopTimer(); // 타이머 정지
         ChangeState(GameState.GameOver);
-        StageManager.GetInstance().LoadStartScene();
+        Debug.Log("[GameManager] OnGameOver → GameState: GameOver");
     }
 
     public void PauseGame()
@@ -49,6 +50,7 @@ public class GameManager : MonoBehaviour
         TimerManager.GetInstance().PauseTimer(); // 타이머 일시정지
         Time.timeScale = 0;
         ChangeState(GameState.Paused);
+        Debug.Log("[GameManager] PauseGame → GameState: Paused");
     }
 
     public void ResumeGame()
@@ -56,6 +58,7 @@ public class GameManager : MonoBehaviour
         TimerManager.GetInstance().ResumeTimer(); // 타이머 재개
         Time.timeScale = 1;
         ChangeState(GameState.Playing);
+        Debug.Log("[GameManager] ResumeGame → GameState: Playing");
     }
 
     void ChangeState(GameState newState) => CurrentState = newState;

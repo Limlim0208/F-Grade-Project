@@ -26,6 +26,7 @@ public class TimerManager : MonoBehaviour
     }
     void Start()
     {
+
         // 처음엔 타이머 텍스트, 바 숨김
         if (timerText != null)
             timerText.gameObject.SetActive(false);
@@ -41,6 +42,8 @@ public class TimerManager : MonoBehaviour
             timerBar.gameObject.SetActive(true);
         TimeRemaining = timeLimit;
         IsTimerRunning = true;
+
+        //IsTimerRunning = false; // [테스트] 타이머 자동 시작 방지(임유미 수정)
     }
     public void StopTimer()
     {

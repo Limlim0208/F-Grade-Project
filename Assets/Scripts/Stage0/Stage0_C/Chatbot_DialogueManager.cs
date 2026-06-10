@@ -18,9 +18,6 @@ public class ChatbotManager : MonoBehaviour
     [Header("텍스트 입력창")]
     [SerializeField] private TMP_InputField inputField;
 
-    [Header("클리어 버튼")]
-    [SerializeField] private GameObject clearButton;
-
     private DialogueDatabase database;
     private ChatbotPattern chatbotPattern;
     private Dictionary<int, DialogueEntry> dialogueMap = new Dictionary<int, DialogueEntry>();
@@ -146,18 +143,8 @@ public class ChatbotManager : MonoBehaviour
     // 챗봇 삭제 버튼 클릭 시 패턴 클리어
     public void OnPatternClearButtonClicked()
     {
-        Destroy(chatbotButton);
+        chatbotPattern.ClearPattern();
         Debug.Log("패턴 C 클리어!");
-
-        // ClearButton 클릭 시 Stage선택 창 으로 이동 (민채은 수정)
-        if (clearButton != null)
-        {
-            clearButton.GetComponent<UnityEngine.UI.Button>().onClick.RemoveAllListeners();
-            clearButton.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() =>
-            {
-                SceneChanger.GetInstance().LoadScene("StageSelectScene");
-            });
-        }
     }
 
     // 버튼 생성 시 레이아웃 업데이트가 느려 제대로 말풍선이 그려지지 않는 문제를 해결하기 위한 레이아웃 리빌드 함수...

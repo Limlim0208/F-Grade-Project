@@ -5674,7 +5674,8 @@ MonoBehaviour:
   scrollContent: {fileID: 6674232824192354681}
   inputContent: {fileID: 1712540239}
   targetPosition: {x: -1200, y: 540}
-  moveSpeed: 500
+  moveSpeed: 2000
+  clearButton: {fileID: 129746159}
 --- !u!114 &1952558116
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5693,7 +5694,6 @@ MonoBehaviour:
   buttonContainer: {fileID: 2674961488394172899}
   scrollButtonContainer: {fileID: 2974117394250956597}
   inputField: {fileID: 1712540241}
-  clearButton: {fileID: 129746159}
 --- !u!1 &1957469404
 GameObject:
   m_ObjectHideFlags: 0

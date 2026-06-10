@@ -70,10 +70,11 @@ public class TimerManager : MonoBehaviour
         }
         UpdateTimerBar();
 
+
         if (TimeRemaining <= 0)
         {
             StopTimer();
-            GameManager.GetInstance().OnGameOver(); // 타이머 시간 종료시 게임 오버
+            GameManager.GetInstance().OnGameOver();
         }
     }
 

@@ -137,7 +137,6 @@ public class ChatbotManager : MonoBehaviour
     public void OnGameOverButtonClicked()
     {
         GameManager.GetInstance().OnGameOver();
-        Debug.Log("게임 오버!");
     }
 
     // 챗봇 삭제 버튼 클릭 시 패턴 클리어

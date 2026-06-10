@@ -26,7 +26,7 @@ public class LogicTrigger : MonoBehaviour
             chatbotPattern.StartSequence();
 
         // 타이머 시작
-        //TimerManager.GetInstance().StartTimer();
+        TimerManager.GetInstance().StartTimer();
 
         // 재클릭 방지
         Button btn = GetComponent<Button>();

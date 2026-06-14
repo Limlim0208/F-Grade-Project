@@ -59,7 +59,8 @@ public class ChatbotPattern : MonoBehaviour
 
         if (isActive)
         {
-            ShowSpeechBubble();
+            // 2026-06-15 디버깅 중(임유미 수정)
+            chatbotManager.ShowDialogue(1);
         }
     }
 

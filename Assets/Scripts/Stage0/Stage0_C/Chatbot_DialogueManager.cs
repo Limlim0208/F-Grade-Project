@@ -26,7 +26,7 @@ public class ChatbotManager : MonoBehaviour
     {
         chatbotPattern = GetComponent<ChatbotPattern>();
         LoadDialogues();
-        ShowDialogue(1);
+        //ShowDialogue(1);
     }
 
     void LoadDialogues()

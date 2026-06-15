@@ -487,7 +487,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   escapingButton: {fileID: 129746164}
   buttonRandomMove: {fileID: 129746165}
-  chatbotPattern: {fileID: 6926283764456348557}
+  chatbotPattern: {fileID: 1952558115}
 --- !u!1 &129746159
 GameObject:
   m_ObjectHideFlags: 0
@@ -2785,7 +2785,7 @@ RectTransform:
   - {fileID: 581894900}
   - {fileID: 11607209}
   - {fileID: 129746160}
-  - {fileID: 4219111972412785826}
+  - {fileID: 1952558113}
   - {fileID: 193990921}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2830,8 +2830,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 222, y: -98.705}
-  m_SizeDelta: {x: 440, y: 0}
+  m_AnchoredPosition: {x: 218.5, y: -98.705}
+  m_SizeDelta: {x: 433, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &786622743
 MonoBehaviour:
@@ -5617,6 +5617,83 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1930909696}
   m_CullTransparentMesh: 1
+--- !u!1 &1952558112
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1952558113}
+  - component: {fileID: 1952558115}
+  - component: {fileID: 1952558116}
+  m_Layer: 5
+  m_Name: Chatbot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1952558113
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1952558112}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 4219111972412785826}
+  - {fileID: 8829118891109767450}
+  m_Father: {fileID: 756580086}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 1, y: 0}
+  m_AnchorMax: {x: 1, y: 0}
+  m_AnchoredPosition: {x: -960, y: 540}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1952558115
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1952558112}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e58019a1a2e15874eb08c64e4c742667, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  chatbot: {fileID: 1952558113}
+  speechBubble: {fileID: 4479305929708501091}
+  buttonContent: {fileID: 4074088330690867693}
+  scrollContent: {fileID: 6674232824192354681}
+  inputContent: {fileID: 1712540239}
+  targetPosition: {x: -1200, y: 540}
+  moveSpeed: 2000
+  clearButton: {fileID: 129746159}
+--- !u!114 &1952558116
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1952558112}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6bf011d7e749d4640aeb0ec4aa2f2820, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  chatbotButton: {fileID: 4521066977059765141}
+  speechBubbleText: {fileID: 8694111285394704417}
+  buttonPrefab: {fileID: 7635815917248698773, guid: 9f46690d3cee3a44097b210ef935851f, type: 3}
+  buttonContainer: {fileID: 2674961488394172899}
+  scrollButtonContainer: {fileID: 2974117394250956597}
+  inputField: {fileID: 1712540241}
 --- !u!1 &1957469404
 GameObject:
   m_ObjectHideFlags: 0
@@ -6038,10 +6115,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3741918506989333296}
-        m_TargetAssemblyTypeName: ChatbotManager, Assembly-CSharp
-        m_MethodName: ShowDialogue
-        m_Mode: 3
+      - m_Target: {fileID: 1952558115}
+        m_TargetAssemblyTypeName: ChatbotPattern, Assembly-CSharp
+        m_MethodName: OnChatbotButtonClicked
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -6157,7 +6234,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 222, y: -170.115}
+  m_AnchoredPosition: {x: 218.5, y: -170.115}
   m_SizeDelta: {x: 440, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2883345535769248321
@@ -6313,25 +6390,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &3741918506989333296
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4521066977059765141}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6bf011d7e749d4640aeb0ec4aa2f2820, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  chatbotButton: {fileID: 4521066977059765141}
-  speechBubbleText: {fileID: 8694111285394704417}
-  buttonPrefab: {fileID: 7635815917248698773, guid: 9f46690d3cee3a44097b210ef935851f, type: 3}
-  buttonContainer: {fileID: 2674961488394172899}
-  scrollButtonContainer: {fileID: 2974117394250956597}
-  inputField: {fileID: 1712540241}
-  clearButton: {fileID: 129746159}
 --- !u!222 &3872290511642123384
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -6450,17 +6508,16 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4521066977059765141}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 8829118891109767450}
-  m_Father: {fileID: 756580086}
+  m_Children: []
+  m_Father: {fileID: 1952558113}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 784, y: 78}
+  m_AnchoredPosition: {x: 784, y: -412}
   m_SizeDelta: {x: 238, y: 330}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &4227174381581269012
@@ -6637,8 +6694,6 @@ GameObject:
   - component: {fileID: 7157732693550097735}
   - component: {fileID: 8527484446423913741}
   - component: {fileID: 2536213203708874521}
-  - component: {fileID: 6926283764456348557}
-  - component: {fileID: 3741918506989333296}
   m_Layer: 5
   m_Name: ChatbotButton
   m_TagString: Untagged
@@ -7092,25 +7147,6 @@ RectTransform:
   m_AnchoredPosition: {x: 180, y: -24.314999}
   m_SizeDelta: {x: 20.75, y: 28.63}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &6926283764456348557
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4521066977059765141}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e58019a1a2e15874eb08c64e4c742667, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  chatbotButton: {fileID: 4219111972412785826}
-  speechBubble: {fileID: 4479305929708501091}
-  buttonContent: {fileID: 4074088330690867693}
-  scrollContent: {fileID: 6674232824192354681}
-  inputContent: {fileID: 1712540239}
-  targetPosition: {x: 682, y: 78}
-  moveSpeed: 500
 --- !u!114 &6982796242934408119
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7308,7 +7344,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 220, y: -16.705}
+  m_AnchoredPosition: {x: 216.5, y: -16.705}
   m_SizeDelta: {x: 405, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7803800151718457754
@@ -7527,7 +7563,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4479305929708501091}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -7536,11 +7572,11 @@ RectTransform:
   - {fileID: 786622742}
   - {fileID: 2674961488394172899}
   - {fileID: 7553415516520215551}
-  m_Father: {fileID: 4219111972412785826}
+  m_Father: {fileID: 1952558113}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: -131, y: -162}
+  m_AnchoredPosition: {x: 653, y: -344}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 1, y: 0}
 --- !u!114 &8829118891109767451
@@ -7558,10 +7594,10 @@ MonoBehaviour:
   m_IgnoreLayout: 0
   m_MinWidth: 437
   m_MinHeight: 240
-  m_PreferredWidth: -1
+  m_PreferredWidth: 437
   m_PreferredHeight: -1
   m_FlexibleWidth: -1
-  m_FlexibleHeight: -1
+  m_FlexibleHeight: 1
   m_LayoutPriority: 1
 --- !u!114 &8918110796391684404
 MonoBehaviour:

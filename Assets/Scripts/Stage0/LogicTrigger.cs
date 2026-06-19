@@ -25,9 +25,6 @@ public class LogicTrigger : MonoBehaviour
         else
             chatbotPattern.StartSequence();
 
-        // 타이머 시작
-        TimerManager.GetInstance().StartTimer();
-
         // 재클릭 방지
         Button btn = GetComponent<Button>();
         btn.transition = Selectable.Transition.None;

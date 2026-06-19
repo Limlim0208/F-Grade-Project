@@ -24,27 +24,31 @@ public class TimerManager : MonoBehaviour
         else Destroy(gameObject);
         SceneManager.sceneLoaded += OnSceneLoaded; // 씬 로드 이벤트 등록
     }
-    void Start()
-    {
 
-        // 처음엔 타이머 텍스트, 바 숨김
-        if (timerText != null)
-            timerText.gameObject.SetActive(false);
-        if (timerBar != null) 
-            timerBar.gameObject.SetActive(false);
-    }
     public void StartTimer()
     {
-        // 타이머 시작 시 텍스트, 바 표시
+        if (timerText == null)
+        {
+            GameObject textObj = GameObject.Find("TimerText");
+            if (textObj != null)
+                timerText = textObj.GetComponent<Text>();
+        }
+        if (timerBar == null)
+        {
+            GameObject barObj = GameObject.Find("TimerBar");
+            if (barObj != null)
+                timerBar = barObj.GetComponent<Image>();
+        }
+
         if (timerText != null)
             timerText.gameObject.SetActive(true);
         if (timerBar != null)
             timerBar.gameObject.SetActive(true);
+
         TimeRemaining = timeLimit;
         IsTimerRunning = true;
-
-        //IsTimerRunning = false; // [테스트] 타이머 자동 시작 방지(임유미 수정)
     }
+
     public void StopTimer()
     {
         IsTimerRunning = false;

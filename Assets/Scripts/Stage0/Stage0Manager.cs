@@ -1,12 +1,13 @@
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class Stage00Manager : MonoBehaviour
 {
     [Header("입력 필드")]
-    [SerializeField] private InputField nameInput;        // 이름
-    [SerializeField] private InputField birthInput;       // 생년월일
-    [SerializeField] private InputField examNumberInput;  // 수험번호
+    [SerializeField] private TMP_InputField nameInput;          //이름
+    [SerializeField] private TMP_InputField birthInput;         //생년월일
+    [SerializeField] private TMP_InputField examNumberInput;    //번호
 
     [Header("버튼")]
     [SerializeField] private Button examNumberButton;  // 수험번호 조회 버튼
@@ -14,13 +15,17 @@ public class Stage00Manager : MonoBehaviour
 
     [Header("팝업")]
     [SerializeField] private GameObject warningPopup;  // 인적사항 미입력 경고 팝업
-    [SerializeField] private Button warningConfirmButton; // 팝업 확인 버튼
+    [SerializeField] private Button warningConfirmButton1; // 확인 버튼 1
+    [SerializeField] private Button warningConfirmButton2;  // 확인 버튼 2
+
+    [SerializeField] private LogicTrigger logicTrigger;
 
     void Start()
     {
         examNumberButton.onClick.AddListener(OnClickExamNumberButton);
         searchButton.onClick.AddListener(OnClickSearchButton);
-        warningConfirmButton.onClick.AddListener(() => warningPopup.SetActive(false));
+        warningConfirmButton1.onClick.AddListener(() => warningPopup.SetActive(false));
+        warningConfirmButton2.onClick.AddListener(() => warningPopup.SetActive(false));
 
         examNumberInput.interactable = false; // 수험번호 직접 입력 불가
     }
@@ -47,11 +52,9 @@ public class Stage00Manager : MonoBehaviour
             string.IsNullOrEmpty(examNumberInput.text))
         {
             warningPopup.SetActive(true);
-            return;
+            return; // 검사 실패면 여기서 끝
         }
 
-        // 여기서 다음 로직 시작
-        Debug.Log("조회 시작! 수험번호: " + examNumberInput.text);
-        // ex) GameManager.GetInstance().StartGame();
+        logicTrigger.OnClicked(); // 검사 통과 후에만 실행
     }
 }

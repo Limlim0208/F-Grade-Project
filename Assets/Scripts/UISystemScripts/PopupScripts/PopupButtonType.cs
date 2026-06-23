@@ -1,18 +1,15 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class PopupButtonType : MonoBehaviour
+public class Enums
 {
-    // Start is called before the first frame update
-    void Start()
+    public enum PopupButtonType
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        None,
+        Yes,
+        No,
+        Confirm,
+        Close,
+        Replay,
+        GoHome,
+        FinishGame,
+        Start
     }
 }

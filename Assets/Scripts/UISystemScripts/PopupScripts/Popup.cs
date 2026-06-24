@@ -1,13 +1,16 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using System;
 
 public class Popup : MonoBehaviour
 {
     [SerializeField]
-    protected Text contentText;
+    protected TMP_Text titleText;
+    [SerializeField]
+    protected TMP_Text contentText;
     [SerializeField]
     protected Transform buttonParent;
     [SerializeField]
@@ -21,6 +24,8 @@ public class Popup : MonoBehaviour
 
     public void Init(PopupInfo info)
     {
+        // 力格 技泼
+        titleText.text = info.Title;
         // 牧刨明 技泼
         contentText.text = info.Content;
         // 妮归 技泼

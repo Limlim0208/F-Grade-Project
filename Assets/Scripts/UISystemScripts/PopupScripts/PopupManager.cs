@@ -33,6 +33,10 @@ public class PopupManager : MonoBehaviour
 
         BuildButtonInfoDict();
     }
+    public void DisableDim()
+    {
+        darkBg.enabled = false;
+    }
 
     private void BuildButtonInfoDict()
     {
@@ -135,6 +139,7 @@ public class PopupManager : MonoBehaviour
         currentActivePopup.Hide();
     }
 }
+
 
 /* 
 * 버튼 정보를 저장할 클래스

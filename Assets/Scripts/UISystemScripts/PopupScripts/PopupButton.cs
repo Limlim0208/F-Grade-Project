@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -9,7 +10,7 @@ using UnityEngine.UI;
 public class PopupButton : Button
 {
     [SerializeField]
-    private Text buttonText;
+    private TMP_Text buttonText;
     [SerializeField]
     private Enums.PopupButtonType buttonType;
 
@@ -20,7 +21,7 @@ public class PopupButton : Button
     public void Init(string buttonStr, Enums.PopupButtonType buttonType, Popup parentPopup)
     {
         if (buttonText == null)
-            buttonText = GetComponentInChildren<Text>();
+            buttonText = GetComponentInChildren<TMP_Text>();
 
         buttonText.text = buttonStr;
         this.buttonType = buttonType;

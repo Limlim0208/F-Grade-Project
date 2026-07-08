@@ -46,6 +46,8 @@ public class IconSpawner : MonoBehaviour
             RotatingIcon ri = icon.GetComponent<RotatingIcon>();
             ri.rotationSpeed = (i == fastestIndex) ? fastSpeed : Random.Range(normalSpeedMin, normalSpeedMax);
             ri.isFastest = (i == fastestIndex);
+            ri.orbitSpeed = 50f;
+            ri.spawnArea = spawnArea;                  // Ãß°¡
 
             spawnedIcons.Add(icon);
         }

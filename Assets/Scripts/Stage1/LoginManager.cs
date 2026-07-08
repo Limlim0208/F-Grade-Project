@@ -78,8 +78,13 @@ public class LoginManager : MonoBehaviour
     {
         inputPopup.SetActive(false);
         overlayImage.gameObject.SetActive(true);
-        checkboxPopup.SetActive(true);
+        StartCoroutine(ShowCheckboxAfterDelay());
+    }
 
+    IEnumerator ShowCheckboxAfterDelay()
+    {
+        yield return new WaitForSeconds(0.5f);
+        checkboxPopup.SetActive(true);
         robotCheckbox.isOn = false;
         checkboxBackground.enabled = true;
         robotCheckbox.onValueChanged.AddListener(OnToggleChanged);
@@ -97,7 +102,7 @@ public class LoginManager : MonoBehaviour
 
     IEnumerator ShowMinigameAfterDelay()
     {
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(1f);
         checkboxPopup.SetActive(false);
         minigamePopup.SetActive(true);
     }

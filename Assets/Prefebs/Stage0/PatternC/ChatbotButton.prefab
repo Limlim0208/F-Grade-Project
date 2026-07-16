@@ -589,13 +589,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e58019a1a2e15874eb08c64e4c742667, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  chatbotButton: {fileID: 4219111972380486036}
+  chatbot: {fileID: 0}
   speechBubble: {fileID: 4479305929741194581}
   buttonContent: {fileID: 4074088330658159835}
   scrollContent: {fileID: 6674232824157561935}
   inputContent: {fileID: 0}
   targetPosition: {x: 0, y: 78}
   moveSpeed: 3000
+  clearButton: {fileID: 0}
 --- !u!114 &3741918506956490246
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -614,7 +615,6 @@ MonoBehaviour:
   buttonContainer: {fileID: 2674961488359232725}
   scrollButtonContainer: {fileID: 2974117394285744643}
   inputField: {fileID: 0}
-  clearButton: {fileID: 0}
 --- !u!1 &6674232824157561935
 GameObject:
   m_ObjectHideFlags: 0

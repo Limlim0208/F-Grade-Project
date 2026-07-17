@@ -4,11 +4,11 @@ public class SettingsButton : MonoBehaviour
 {
     public void OnClickOpen()
     {
-        UIManager.GetInstance().OpenSettings();
+        SettingsManager.GetInstance().OpenSettings();
     }
 
     public void OnClickClose()
     {
-        UIManager.GetInstance().CloseSettings();
+        SettingsManager.GetInstance().CloseSettings();
     }
 }

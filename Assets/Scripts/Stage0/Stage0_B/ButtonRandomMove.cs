@@ -37,7 +37,7 @@ public class ButtonRandomMove : MonoBehaviour, IPointerClickHandler
         if (chatbotCanvasGroup == null)
             chatbotCanvasGroup = chatbotButton.gameObject.AddComponent<CanvasGroup>();
 
-        chatbotButton.GetComponent<Button>().onClick.AddListener(OnChatbotClicked);
+        chatbotButton.GetComponentInChildren<Button>().onClick.AddListener(OnChatbotClicked); // 임유미 수정: Chatbot 오브젝트 구조 변경
         originalSiblingIndex = transform.GetSiblingIndex(); // 우선순위 기억
     }
 

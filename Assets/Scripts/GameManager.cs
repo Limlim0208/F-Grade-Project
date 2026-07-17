@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -58,7 +59,16 @@ public class GameManager : MonoBehaviour
         TimerManager.GetInstance().ResumeTimer(); // 타이머 재개
         Time.timeScale = 1;
         ChangeState(GameState.Playing);
-        Debug.Log("[GameManager] ResumeGame → GameState: Playing");
+        Debug.Log("[GameManager] ResumeGame → GameState: Playsing");
+    }
+
+    // 스테이지 재시작 (현재 씬 재로드)
+    public void RestartStage()
+    {
+        Time.timeScale = 1; // Paused 상태였을 경우 시간 흐름 복구 
+
+        Debug.Log("[GameManager] RestartStage → 씬 재로드");
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     void ChangeState(GameState newState) => CurrentState = newState;

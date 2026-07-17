@@ -12,6 +12,8 @@ public class MinigameManager : MonoBehaviour
     public GameObject resultPanel;
     public GameObject minigamePopup;
     public GameObject verifiedPopup;
+    public GameObject shutdown;
+    public GameObject overlayImage;
 
     [Header("연출")]
     public float failRestartDelay = 1.5f;
@@ -63,5 +65,7 @@ public class MinigameManager : MonoBehaviour
         verifiedPopup.SetActive(true);
         yield return new WaitForSeconds(2f);
         verifiedPopup.SetActive(false);
+        overlayImage.SetActive(false);   // 추가
+        shutdown.SetActive(true);
     }
 }

@@ -54,6 +54,11 @@ public class StageManager : MonoBehaviour
     public void OnStageFailed()
     {
         CurrentStage = 0; // 현재까지 클리어한 스테이지 수 초기화
+        SceneChanger.GetInstance().LoadScene("StageSelectScene"); // 스테이지 선택 화면으로 이동
+    }
+
+    public void LoadStartScene()
+    {
         SceneChanger.GetInstance().LoadScene("StartScene");
     }
 

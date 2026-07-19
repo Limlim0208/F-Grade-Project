@@ -14,6 +14,7 @@ public class LogicTrigger : MonoBehaviour
     public void OnClicked()
     {
         int rand = Random.Range(0, 3);
+        //int rand = 0; // 테스트용 코드
         if (rand == 0)
             escapingButton.StartEscaping();
         else if (rand == 1)

@@ -56,6 +56,9 @@ public class EscapingButton : MonoBehaviour, IPointerClickHandler
     {
         if (isCaught) return;
 
+        // 2026-07-20 임유미 추가: 캔버스 렌더링 방식을 오버레이에서 카메라로 바꾸면서 좌표 계산 방식 일부 수정
+        Camera cam = canvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : Camera.main;
+
         Vector2 mousePos;
         RectTransformUtility.ScreenPointToLocalPointInRectangle(
             canvasRect,
@@ -70,12 +73,29 @@ public class EscapingButton : MonoBehaviour, IPointerClickHandler
         Vector2 canvasLocalPos;
         RectTransformUtility.ScreenPointToLocalPointInRectangle(
             canvasRect,
-            RectTransformUtility.WorldToScreenPoint(null, worldPos),
-            canvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : Camera.main,
+            RectTransformUtility.WorldToScreenPoint(cam, worldPos), // 2026-07-20 임유미 수정: null → cam
+            cam,
             out canvasLocalPos
-        );
+    );
 
         float distance = Vector2.Distance(mousePos, canvasLocalPos);
+
+        //// 2026-07-20 임유미 추가: 디버깅
+        //// ===== 디버깅 로그 =====
+        //Debug.Log(
+        //    $"[EscapingButton] " +
+        //    $"renderMode: {canvas.renderMode} | " +
+        //    $"Camera.main: {(Camera.main != null ? Camera.main.name : "NULL")} | " +
+        //    $"Input.mousePosition: {Input.mousePosition} | " +
+        //    $"mousePos(local): {mousePos} | " +
+        //    $"buttonPos(anchored): {buttonPos} | " +
+        //    $"worldPos: {worldPos} | " +
+        //    $"canvasLocalPos: {canvasLocalPos} | " +
+        //    $"distance: {distance:F1} | " +
+        //    $"escapeDistance: {escapeDistance} | " +
+        //    $"isMoving: {isMoving}"
+        //);
+        //// =====================
 
         if (distance < escapeDistance)
         {
@@ -137,14 +157,17 @@ public class EscapingButton : MonoBehaviour, IPointerClickHandler
 
     private Vector2 ClampToCanvas(Vector2 pos)
     {
+        // 2026-07-20 임유미 추가
+        Camera cam = canvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : Camera.main;
+
         Vector3 worldPos = rectTransform.parent.TransformPoint(new Vector3(pos.x, pos.y, 0));
         Vector2 canvasLocalPos;
         RectTransformUtility.ScreenPointToLocalPointInRectangle(
             canvasRect,
-            RectTransformUtility.WorldToScreenPoint(null, worldPos),
-            canvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : Camera.main,
+            RectTransformUtility.WorldToScreenPoint(cam, worldPos), // 2026-07-20 임유미 수정: null → cam
+            cam,
             out canvasLocalPos
-        );
+    );
 
         Vector2 canvasSize = canvasRect.rect.size;
         Vector2 buttonHalf = rectTransform.sizeDelta * 0.5f;

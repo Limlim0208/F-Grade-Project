@@ -107,18 +107,18 @@ public class ChatbotPattern : MonoBehaviour
         StartCoroutine(RebuildAll());
     }
 
-    // 챗봇 리셋 로직(아직 사용 X)
-    //public void ResetChatbot()
-    //{
-    //    // 리셋 시 시퀀스 비활성화
-    //    isActive = false;
+    //챗봇 리셋 로직
+    public void ResetChatbot()
+    {
+        // 리셋 시 시퀀스 비활성화
+        isActive = false;
 
-    //    speechBubble.SetActive(false);
-    //    buttonContent.SetActive(false);
-    //    scrollContent.SetActive(false);
-    //    inputContent.SetActive(false);
-    //    chatbot.anchoredPosition = originalPosition;
-    //}
+        speechBubble.SetActive(false);
+        buttonContent.SetActive(false);
+        scrollContent.SetActive(false);
+        inputContent.SetActive(false);
+        chatbot.anchoredPosition = originalPosition;
+    }
 
     // UI 리빌드 함수
     IEnumerator RebuildAll()
@@ -132,17 +132,21 @@ public class ChatbotPattern : MonoBehaviour
     // 챗봇 삭제 버튼 클릭 시 패턴 클리어
     public void ClearPattern()
     {
-        Destroy(chatbot.gameObject);
+        ResetChatbot();
 
-        // ClearButton 클릭 시 Stage선택 창 으로 이동 (민채은 수정)
+        // 2026-07-20 임유미 수정
+        // ClearButton 클릭 시 스테이지 클리어 로직 실행
         if (clearButton != null)
         {
-            clearButton.GetComponent<UnityEngine.UI.Button>().onClick.RemoveAllListeners();
-            clearButton.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() =>
+            var button = clearButton.GetComponent<UnityEngine.UI.Button>();
+            button.interactable = true; // 추가: LogicTrigger가 꺼둔 상태를 복구
+            button.onClick.RemoveAllListeners();
+            button.onClick.AddListener(() =>
             {
                 GameManager.GetInstance().OnStageClear();
             });
         }
+        else { Debug.LogWarning("clearButton 참조 없음"); }
     }
 
 }

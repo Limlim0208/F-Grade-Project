@@ -100,7 +100,7 @@ public class ButtonRandomMove : MonoBehaviour, IPointerClickHandler
             else if (clearClickCount >= randomMoveCount)
             {
                 transform.SetSiblingIndex(originalSiblingIndex); // 원래 우선순위로 복귀
-                rectTransform.position = chatbotButton.position + new Vector3(0, 100f, 0);
+                rectTransform.position = chatbotButton.position + new Vector3(-1f, 1f, 0); // 2026-07-20 임유미 수정: 클리어 버튼을 메인 패널 하위에 두면서 클리어 버튼이 이동하는 위치 수정
                 isHiding = true;
                 isActive = false;
             }

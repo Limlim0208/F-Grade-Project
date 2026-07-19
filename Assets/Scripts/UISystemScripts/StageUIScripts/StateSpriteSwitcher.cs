@@ -41,6 +41,7 @@ public class StateSpriteSwitcher : MonoBehaviour
             if (entry.state == current)
             {
                 chatbotImage.sprite = entry.sprite;
+                chatbotImage.SetNativeSize(); // Ãß°¡
                 return;
             }
         }

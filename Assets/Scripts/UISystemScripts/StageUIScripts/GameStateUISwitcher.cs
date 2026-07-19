@@ -12,6 +12,8 @@ using UnityEngine;
 
 public class GameStateUISwitcher : MonoBehaviour
 {
+
+    // 패널 조작 로직
     [System.Serializable]
     private struct StatePanel
     {
@@ -20,6 +22,17 @@ public class GameStateUISwitcher : MonoBehaviour
     }
 
     [SerializeField] private StatePanel[] statePanels;
+
+
+    // 파티클 애니메이션 그룹 조작 로직
+    [System.Serializable]
+    private struct StateAnimationGroup
+    {
+        public GameManager.GameState state;
+        public GameObject animationRoot; // 파티클들을 담고 있는 부모 오브젝트 (예: "Animation")
+    }
+
+    [SerializeField] private StateAnimationGroup[] stateAnimationGroups;
 
     void Awake()
     {
@@ -37,5 +50,19 @@ public class GameStateUISwitcher : MonoBehaviour
         {
             entry.panel.SetActive(entry.state == current);
         }
+
+        foreach (var entry in stateAnimationGroups)
+        {
+            bool shouldPlay = entry.state == current;
+            entry.animationRoot.SetActive(shouldPlay);
+
+            if (shouldPlay)
+            {
+                var particles = entry.animationRoot.GetComponentsInChildren<ParticleSystem>(true);
+                foreach (var particle in particles)
+                    particle.Play();
+            }
+        }
     }
+
 }

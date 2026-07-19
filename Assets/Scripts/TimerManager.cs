@@ -74,7 +74,7 @@ public class TimerManager : MonoBehaviour
         }
         UpdateTimerBar();
 
-
+        // 타이머 값이 0 이하가 됐을 때 게임 오버 로직
         if (TimeRemaining <= 0)
         {
             StopTimer();

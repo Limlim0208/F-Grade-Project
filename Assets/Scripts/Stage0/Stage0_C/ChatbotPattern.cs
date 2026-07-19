@@ -140,7 +140,7 @@ public class ChatbotPattern : MonoBehaviour
             clearButton.GetComponent<UnityEngine.UI.Button>().onClick.RemoveAllListeners();
             clearButton.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() =>
             {
-                SceneChanger.GetInstance().LoadScene("StageSelectScene");
+                GameManager.GetInstance().OnStageClear();
             });
         }
     }

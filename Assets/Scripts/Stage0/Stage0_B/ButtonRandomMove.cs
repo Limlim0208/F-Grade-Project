@@ -117,8 +117,9 @@ public class ButtonRandomMove : MonoBehaviour, IPointerClickHandler
             }
             else
             {
-                // 두 번째 클릭 - 스테이지 클리어
-                SceneChanger.GetInstance().LoadScene("StageSelectScene");
+                // 2026-07-20 임유미 수정
+                // 두 번째 클릭 - 스테이지 클리어 처리
+                GameManager.GetInstance().OnStageClear();
             }
         }
     }

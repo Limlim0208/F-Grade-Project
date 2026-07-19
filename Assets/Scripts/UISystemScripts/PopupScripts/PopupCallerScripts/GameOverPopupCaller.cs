@@ -38,7 +38,7 @@ public class GameOverPopupCaller : MonoBehaviour
                 {
                     case Enums.PopupButtonType.Confirm:
                         PopupManager.Instance.CloseCurrentActivePopup();
-                        StageManager.GetInstance().OnStageFailed(); // 확인 버튼 클릭 시 스테이지 실패 로직 실행
+                        StageProgressManager.GetInstance().OnStageFailed(); // 확인 버튼 클릭 시 스테이지 실패 로직 실행
                         break;
                 }
             })

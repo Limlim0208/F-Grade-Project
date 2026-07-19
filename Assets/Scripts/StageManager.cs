@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 
-public class StageManager : MonoBehaviour
+public class StageProgressManager : MonoBehaviour
 {
-    public static StageManager Instance { get; private set; }
+    public static StageProgressManager Instance { get; private set; }
 
     public int CurrentStage { get; private set; } = 0; // 스테이지 번호 0으로 초기화
     public int TotalStages { get; private set; } = 5; // 마지막 스테이지 번호
@@ -18,12 +18,12 @@ public class StageManager : MonoBehaviour
     }
 
     // 씬 관리 Instance가 없으면 자동 생성
-    public static StageManager GetInstance()
+    public static StageProgressManager GetInstance()
     {
         if (Instance == null)
         {
             GameObject obj = new GameObject("StageManager");
-            obj.AddComponent<StageManager>();
+            obj.AddComponent<StageProgressManager>();
         }
         return Instance;
     }
@@ -41,7 +41,7 @@ public class StageManager : MonoBehaviour
         if (CurrentStage < TotalStages)
         {
             CurrentStage++;
-            SceneChanger.GetInstance().LoadStage(CurrentStage);
+            SceneChanger.GetInstance().LoadScene("StageSelectScene");
         }
         else
         {

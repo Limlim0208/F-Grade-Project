@@ -36,6 +36,7 @@ public class GameStateUISwitcher : MonoBehaviour
 
     void Awake()
     {
+        Debug.Log($"[UIStateSwitcher] Awake 호출됨: {gameObject.name}");
         GameManager.OnGameStateChanged += HandleGameStateChanged;
     }
 
@@ -46,9 +47,22 @@ public class GameStateUISwitcher : MonoBehaviour
 
     void HandleGameStateChanged(GameManager.GameState previous, GameManager.GameState current)
     {
+        // 같은 패널이 여러 state에 등록된 경우를 대비해, 패널별로 "켜져야 하는지" 여부를 먼저 취합
+        var shouldActivateMap = new Dictionary<GameObject, bool>();
+
         foreach (var entry in statePanels)
         {
-            entry.panel.SetActive(entry.state == current);
+            bool matches = entry.state == current;
+
+            if (!shouldActivateMap.ContainsKey(entry.panel))
+                shouldActivateMap[entry.panel] = matches;
+            else
+                shouldActivateMap[entry.panel] |= matches; // 하나라도 true면 true 유지
+        }
+
+        foreach (var pair in shouldActivateMap)
+        {
+            pair.Key.SetActive(pair.Value);
         }
 
         foreach (var entry in stateAnimationGroups)

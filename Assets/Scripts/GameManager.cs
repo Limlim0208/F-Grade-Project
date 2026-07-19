@@ -25,13 +25,26 @@ public class GameManager : MonoBehaviour
     // 임유미 수정: GameState 변경 시 브로드캐스트
     void ChangeState(GameState newState)
     {
-        if (CurrentState == newState) return; // 같은 상태로 중복 변경 방지
+        if (CurrentState == newState) return;
 
         GameState previousState = CurrentState;
         CurrentState = newState;
         Debug.Log($"[GameManager] GameState: {previousState} → {newState}");
 
-        OnGameStateChanged?.Invoke(previousState, newState);
+        if (OnGameStateChanged != null)
+        {
+            foreach (Action<GameState, GameState> handler in OnGameStateChanged.GetInvocationList())
+            {
+                try
+                {
+                    handler.Invoke(previousState, newState);
+                }
+                catch (System.Exception e)
+                {
+                    Debug.LogWarning($"[GameManager] 구독자 호출 중 예외 발생 (아마 파괴된 오브젝트): {e.Message}");
+                }
+            }
+        }
     }
 
     void Awake()

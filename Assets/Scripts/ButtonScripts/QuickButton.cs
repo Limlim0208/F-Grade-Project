@@ -4,11 +4,11 @@ public class QuickButton : MonoBehaviour
 {
     public void OnClickOpen()
     {
-        UIManager.GetInstance().OpenSettings();
+        SettingsManager.GetInstance().OpenSettings();
     }
 
     public void OnClickClose()
     {
-        UIManager.GetInstance().CloseSettings();
+        SettingsManager.GetInstance().CloseSettings();
     }
 }

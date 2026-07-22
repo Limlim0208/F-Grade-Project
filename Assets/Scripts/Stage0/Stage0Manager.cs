@@ -22,6 +22,7 @@ public class Stage00Manager : MonoBehaviour
 
     void Start()
     {
+        GameManager.GetInstance().StartGame(); // 2026-07-19 임유미 추가: 스테이지 진입 시 게임 상태 초기화
         examNumberButton.onClick.AddListener(OnClickExamNumberButton);
         searchButton.onClick.AddListener(OnClickSearchButton);
         warningConfirmButton1.onClick.AddListener(() => warningPopup.SetActive(false));

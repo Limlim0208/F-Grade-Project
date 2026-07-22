@@ -57,30 +57,30 @@ public class PopupManager : MonoBehaviour
         }
     }
 
-    // 테스트용 팝업 코드
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            var info = new PopupInfo.Builder().SetContent("테스트 입니다.")
-                .SetButtons(Enums.PopupButtonType.Close, Enums.PopupButtonType.Confirm)
-                .SetListener((type) =>
-                {
-                    switch (type)
-                    {
-                        case Enums.PopupButtonType.Close:
-                            currentActivePopup.Hide();
-                            break;
-                        case Enums.PopupButtonType.Confirm:
-                            currentActivePopup.Hide();
-                            break;
-                    }
-                })
-                .Build();
+    //// 테스트용 팝업 코드
+    //private void Update()
+    //{
+    //    if (Input.GetKeyDown(KeyCode.Space))
+    //    {
+    //        var info = new PopupInfo.Builder().SetContent("테스트 입니다.")
+    //            .SetButtons(Enums.PopupButtonType.Close, Enums.PopupButtonType.Confirm)
+    //            .SetListener((type) =>
+    //            {
+    //                switch (type)
+    //                {
+    //                    case Enums.PopupButtonType.Close:
+    //                        currentActivePopup.Hide();
+    //                        break;
+    //                    case Enums.PopupButtonType.Confirm:
+    //                        currentActivePopup.Hide();
+    //                        break;
+    //                }
+    //            })
+    //            .Build();
 
-            ShowPopup(info);
-        }
-    }
+    //        ShowPopup(info);
+    //    }
+    //}
 
     // 팝업 띄우기
     public void ShowPopup(PopupInfo info)

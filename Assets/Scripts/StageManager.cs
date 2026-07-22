@@ -1,11 +1,11 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
-public class StageManager : MonoBehaviour
+public class StageProgressManager : MonoBehaviour
 {
-    public static StageManager Instance { get; private set; }
+    public static StageProgressManager Instance { get; private set; }
 
-    public int CurrentStage { get; private set; } = 0; // ½ºÅ×ÀÌÁö ¹øÈ£ 0À¸·Î ÃÊ±âÈ­
-    public int TotalStages { get; private set; } = 5; // ¸¶Áö¸· ½ºÅ×ÀÌÁö ¹øÈ£
+    public int CurrentStage { get; private set; } = 0; // ìŠ¤í…Œì´ì§€ ë²ˆí˜¸ 0ìœ¼ë¡œ ì´ˆê¸°í™”
+    public int TotalStages { get; private set; } = 5; // ë§ˆì§€ë§‰ ìŠ¤í…Œì´ì§€ ë²ˆí˜¸
 
     void Awake()
     {
@@ -17,43 +17,49 @@ public class StageManager : MonoBehaviour
         else Destroy(gameObject);
     }
 
-    // ¾À °ü¸® Instance°¡ ¾øÀ¸¸é ÀÚµ¿ »ı¼º
-    public static StageManager GetInstance()
+    // ì”¬ ê´€ë¦¬ Instanceê°€ ì—†ìœ¼ë©´ ìë™ ìƒì„±
+    public static StageProgressManager GetInstance()
     {
         if (Instance == null)
         {
             GameObject obj = new GameObject("StageManager");
-            obj.AddComponent<StageManager>();
+            obj.AddComponent<StageProgressManager>();
         }
         return Instance;
     }
 
-    // StageSelectScene¿¡¼­ ½ºÅ×ÀÌÁö ¼±ÅÃ ¹öÆ° Å¬¸¯ ½Ã È£Ãâ
+    // StageSelectSceneì—ì„œ ìŠ¤í…Œì´ì§€ ì„ íƒ ë²„íŠ¼ í´ë¦­ ì‹œ í˜¸ì¶œ
     public void SetStage(int stageId)
     {
         CurrentStage = stageId;
         SceneChanger.GetInstance().LoadStage(stageId);
     }
 
-    // Å¬¸®¾î ¼º°ø ½Ã ´ÙÀ½ ½ºÅ×ÀÌÁö·Î ÀÌµ¿
+    // í´ë¦¬ì–´ ì„±ê³µ ì‹œ ë‹¤ìŒ ìŠ¤í…Œì´ì§€ë¡œ ì´ë™
     public void LoadNextStage()
     {
         if (CurrentStage < TotalStages)
         {
             CurrentStage++;
-            SceneChanger.GetInstance().LoadStage(CurrentStage);
+            SceneChanger.GetInstance().LoadScene("StageSelectScene");
         }
         else
         {
-            SceneChanger.GetInstance().LoadScene("FinalScene"); // ¸¶Áö¸· ½ºÅ×ÀÌÁö
+            SceneChanger.GetInstance().LoadScene("FinalScene"); // ë§ˆì§€ë§‰ ìŠ¤í…Œì´ì§€
         }
     }
 
-    // Å¬¸®¾î ½ÇÆĞ ½Ã ½ÃÀÛÈ­¸éÀ¸·Î ÀÌµ¿
-    // TODO: ½ºÅ×ÀÌÁö Å¬¸®¾î ½ÇÆĞ ·ÎÁ÷ Ãß°¡ÇØ¾ß  ÇÔ
+    // 2026-07-19 ì„ìœ ë¯¸ ì¶”ê°€
+    // í´ë¦¬ì–´ ì‹¤íŒ¨ ì‹œ ì²˜ë¦¬ â€” GameOverPopupì˜ í™•ì¸ ë²„íŠ¼ì—ì„œ í˜¸ì¶œë¨
+    public void OnStageFailed()
+    {
+        CurrentStage = 0; // í˜„ì¬ê¹Œì§€ í´ë¦¬ì–´í•œ ìŠ¤í…Œì´ì§€ ìˆ˜ ì´ˆê¸°í™”
+        SceneChanger.GetInstance().LoadScene("StageSelectScene"); // ìŠ¤í…Œì´ì§€ ì„ íƒ í™”ë©´ìœ¼ë¡œ ì´ë™
+    }
+
     public void LoadStartScene()
     {
-        CurrentStage = 0; // ÃÊ±âÈ­
         SceneChanger.GetInstance().LoadScene("StartScene");
     }
+
 }

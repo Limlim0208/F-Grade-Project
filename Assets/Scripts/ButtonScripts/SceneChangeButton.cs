@@ -8,7 +8,7 @@ public class SceneChangeButton : MonoBehaviour
     public void OnClick()
     {
         if (stageId >= 0)
-            StageManager.GetInstance().SetStage(stageId);      // 스테이지 번호로 이동
+            StageProgressManager.GetInstance().SetStage(stageId);      // 스테이지 번호로 이동
         else if (!string.IsNullOrEmpty(sceneName))
             SceneChanger.GetInstance().LoadScene(sceneName);   // 씬 이름으로 이동
     }

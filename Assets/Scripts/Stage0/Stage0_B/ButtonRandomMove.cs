@@ -37,7 +37,7 @@ public class ButtonRandomMove : MonoBehaviour, IPointerClickHandler
         if (chatbotCanvasGroup == null)
             chatbotCanvasGroup = chatbotButton.gameObject.AddComponent<CanvasGroup>();
 
-        chatbotButton.GetComponent<Button>().onClick.AddListener(OnChatbotClicked);
+        chatbotButton.GetComponentInChildren<Button>().onClick.AddListener(OnChatbotClicked); // 임유미 수정: Chatbot 오브젝트 구조 변경
         originalSiblingIndex = transform.GetSiblingIndex(); // 우선순위 기억
     }
 
@@ -100,7 +100,7 @@ public class ButtonRandomMove : MonoBehaviour, IPointerClickHandler
             else if (clearClickCount >= randomMoveCount)
             {
                 transform.SetSiblingIndex(originalSiblingIndex); // 원래 우선순위로 복귀
-                rectTransform.position = chatbotButton.position + new Vector3(0, 100f, 0);
+                rectTransform.position = chatbotButton.position + new Vector3(-1f, 1f, 0); // 2026-07-20 임유미 수정: 클리어 버튼을 메인 패널 하위에 두면서 클리어 버튼이 이동하는 위치 수정
                 isHiding = true;
                 isActive = false;
             }
@@ -117,8 +117,9 @@ public class ButtonRandomMove : MonoBehaviour, IPointerClickHandler
             }
             else
             {
-                // 두 번째 클릭 - 스테이지 클리어
-                SceneChanger.GetInstance().LoadScene("StageSelectScene");
+                // 2026-07-20 임유미 수정
+                // 두 번째 클릭 - 스테이지 클리어 처리
+                GameManager.GetInstance().OnStageClear();
             }
         }
     }

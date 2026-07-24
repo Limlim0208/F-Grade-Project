@@ -66,7 +66,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 0527399aecff44d459d651020300cb8a, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 5ade246a427396149b6885928e00dbab, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -88,3 +88,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dfa405bc3d0be534e8b67382a9b9e104, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rotationSpeed: 0
+  isFastest: 0
+  orbitRadius: 0
+  orbitSpeed: 0
+  orbitAngle: 0
+  spawnArea: {fileID: 0}

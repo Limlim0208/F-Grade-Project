@@ -1,19 +1,28 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class ServerDownManager : MonoBehaviour
 {
     public Button refreshButton;
-    public GameObject shutdown;   // ¼öÁ¤
+    public GameObject shutdown;   // ï¿½ï¿½ï¿½ï¿½
+    public GameObject serverWaitingPopup;
 
     void Start()
     {
-        shutdown.SetActive(false);   // ¼öÁ¤
+        shutdown.SetActive(false);   // ï¿½ï¿½ï¿½ï¿½
         refreshButton.onClick.AddListener(OnRefreshClicked);
     }
 
     void OnRefreshClicked()
     {
         shutdown.SetActive(false);
+        StartCoroutine(ShowServerWaitingAfterDelay());
+    }
+
+    IEnumerator ShowServerWaitingAfterDelay()
+    {
+        yield return new WaitForSeconds(1f);
+        serverWaitingPopup.SetActive(true);
     }
 }

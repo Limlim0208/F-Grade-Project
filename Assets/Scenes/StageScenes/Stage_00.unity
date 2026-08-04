@@ -698,6 +698,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 11607209}
+  - {fileID: 1043949551}
   - {fileID: 4113436}
   m_Father: {fileID: 756580086}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -944,6 +945,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   logicB: {fileID: 1043949551}
+  hideOffset: {x: 0, y: 0}
   randomMoveCount: 3
   clicksToDisappear: 5
   timePenalty: 5
@@ -3658,7 +3660,6 @@ RectTransform:
   - {fileID: 8523343826259518886}
   - {fileID: 288116744}
   - {fileID: 859647090}
-  - {fileID: 1043949551}
   - {fileID: 64797867}
   - {fileID: 1223423497}
   - {fileID: 1117917210}
@@ -9236,11 +9237,11 @@ RectTransform:
   m_Children:
   - {fileID: 1030072811}
   - {fileID: 593351511}
-  m_Father: {fileID: 756580086}
+  m_Father: {fileID: 64797867}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 960, y: -214.19998}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 464.30002}
   m_SizeDelta: {x: 665.65, y: 120.69}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1043949552

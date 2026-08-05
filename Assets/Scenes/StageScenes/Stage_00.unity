@@ -18206,6 +18206,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   logicTrigger: {fileID: 129746166}
   examNumberInput: {fileID: 600056042}
+  examNumberButton: {fileID: 58070671}
 --- !u!114 &2128924745 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8503668766907637578, guid: 5adb0b9702960f8488090b2e99d0aee0, type: 3}

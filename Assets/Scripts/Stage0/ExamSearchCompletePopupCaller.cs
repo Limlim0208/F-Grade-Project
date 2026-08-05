@@ -1,10 +1,12 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ExamSearchCompletePopupCaller : MonoBehaviour
 {
     [SerializeField] private LogicTrigger logicTrigger;
     [SerializeField] private TMP_InputField examNumberInput;
+    [SerializeField] private Button examNumberButton;
 
     public void ShowPopup()
     {
@@ -26,6 +28,7 @@ public class ExamSearchCompletePopupCaller : MonoBehaviour
                         examNumberInput.text = randomNumber.ToString("D6");
 
                         logicTrigger.OnClicked();
+                        examNumberButton.interactable = false; // 로직 실행 중 재클릭 방지
                         break;
                 }
             })

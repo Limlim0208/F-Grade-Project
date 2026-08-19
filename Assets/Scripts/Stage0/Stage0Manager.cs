@@ -4,34 +4,32 @@ using TMPro;
 
 public class Stage00Manager : MonoBehaviour
 {
-    [Header("ÀÔ·Â ÇÊµå")]
-    [SerializeField] private TMP_InputField nameInput;          //ÀÌ¸§
-    [SerializeField] private TMP_InputField birthInput;         //»ý³â¿ùÀÏ
-    [SerializeField] private TMP_InputField examNumberInput;    //¹øÈ£
+    [Header("ï¿½Ô·ï¿½ ï¿½Êµï¿½")]
+    [SerializeField] private TMP_InputField nameInput;          //ï¿½Ì¸ï¿½
+    [SerializeField] private TMP_InputField birthInput;         //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    [SerializeField] private TMP_InputField examNumberInput;    //ï¿½ï¿½È£
 
-    [Header("¹öÆ°")]
-    [SerializeField] private Button examNumberButton;  // ¼öÇè¹øÈ£ Á¶È¸ ¹öÆ°
-    [SerializeField] private Button searchButton;      // Á¶È¸ÇÏ±â ¹öÆ°
+    [Header("ï¿½ï¿½Æ°")]
+    [SerializeField] private Button examNumberButton;  // ï¿½ï¿½ï¿½ï¿½ï¿½È£ ï¿½ï¿½È¸ ï¿½ï¿½Æ°
 
-    [Header("ÆË¾÷")]
-    [SerializeField] private GameObject warningPopup;  // ÀÎÀû»çÇ× ¹ÌÀÔ·Â °æ°í ÆË¾÷
-    [SerializeField] private Button warningConfirmButton1; // È®ÀÎ ¹öÆ° 1
-    [SerializeField] private Button warningConfirmButton2;  // È®ÀÎ ¹öÆ° 2
+    [Header("ï¿½Ë¾ï¿½")]
+    [SerializeField] private GameObject warningPopup;  // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ô·ï¿½ ï¿½ï¿½ï¿½ ï¿½Ë¾ï¿½
+    [SerializeField] private Button warningConfirmButton1; // È®ï¿½ï¿½ ï¿½ï¿½Æ° 1
+    [SerializeField] private Button warningConfirmButton2;  // È®ï¿½ï¿½ ï¿½ï¿½Æ° 2
 
-    [SerializeField] private LogicTrigger logicTrigger;
+    [SerializeField] private ExamSearchCompletePopupCaller examSearchCompletePopupCaller;
 
     void Start()
     {
-        GameManager.GetInstance().StartGame(); // 2026-07-19 ÀÓÀ¯¹Ì Ãß°¡: ½ºÅ×ÀÌÁö ÁøÀÔ ½Ã °ÔÀÓ »óÅÂ ÃÊ±âÈ­
+        GameManager.GetInstance().StartGame(); // 2026-07-19 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ß°ï¿½: ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½È­
         examNumberButton.onClick.AddListener(OnClickExamNumberButton);
-        searchButton.onClick.AddListener(OnClickSearchButton);
         warningConfirmButton1.onClick.AddListener(() => warningPopup.SetActive(false));
         warningConfirmButton2.onClick.AddListener(() => warningPopup.SetActive(false));
 
-        examNumberInput.interactable = false; // ¼öÇè¹øÈ£ Á÷Á¢ ÀÔ·Â ºÒ°¡
+        examNumberInput.interactable = false; // ï¿½ï¿½ï¿½ï¿½ï¿½È£ ï¿½ï¿½ï¿½ï¿½ ï¿½Ô·ï¿½ ï¿½Ò°ï¿½
     }
 
-    // ¼öÇè¹øÈ£ Á¶È¸ ¹öÆ°
+    // ï¿½ï¿½ï¿½ï¿½ï¿½È£ ï¿½ï¿½È¸ ï¿½ï¿½Æ°
     private void OnClickExamNumberButton()
     {
         if (string.IsNullOrEmpty(nameInput.text) || string.IsNullOrEmpty(birthInput.text))
@@ -40,22 +38,6 @@ public class Stage00Manager : MonoBehaviour
             return;
         }
 
-        // ·£´ý 6ÀÚ¸® »ý¼º (000000 ~ 999999)
-        int randomNumber = Random.Range(0, 1000000);
-        examNumberInput.text = randomNumber.ToString("D6"); // ¾ÕÀÚ¸® 0 Æ÷ÇÔ 6ÀÚ¸®
-    }
-
-    // Á¶È¸ÇÏ±â ¹öÆ°
-    private void OnClickSearchButton()
-    {
-        if (string.IsNullOrEmpty(nameInput.text) ||
-            string.IsNullOrEmpty(birthInput.text) ||
-            string.IsNullOrEmpty(examNumberInput.text))
-        {
-            warningPopup.SetActive(true);
-            return; // °Ë»ç ½ÇÆÐ¸é ¿©±â¼­ ³¡
-        }
-
-        logicTrigger.OnClicked(); // °Ë»ç Åë°ú ÈÄ¿¡¸¸ ½ÇÇà
+        examSearchCompletePopupCaller.ShowPopup(); // ï¿½Ë¾ï¿½ È®ï¿½ï¿½ Å¬ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½È£ ï¿½ï¿½ï¿½ï¿½ + ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ (ExamSearchCompletePopupCallerï¿½ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½)
     }
 }

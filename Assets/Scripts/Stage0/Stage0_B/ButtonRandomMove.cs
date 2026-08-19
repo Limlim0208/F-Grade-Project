@@ -4,21 +4,22 @@ using UnityEngine.EventSystems;
 
 public class ButtonRandomMove : MonoBehaviour, IPointerClickHandler
 {
-    [Header("¿¬°á ¿ÀºêÁ§Æ®")]
-    [SerializeField] private RectTransform chatbotButton;
-    [Header("¼³Á¤")]
+    [Header("ìˆ¨ì„ ìœ„ì¹˜ ì˜¤ë¸Œì íŠ¸")]
+    [SerializeField] private RectTransform logicB;
+    [SerializeField] private Vector2 hideOffset = Vector2.zero;
+    [Header("ì„¤ì •")]
     [SerializeField] private int randomMoveCount = 3;
     [SerializeField] private int clicksToDisappear = 5;
-    [SerializeField] private float timePenalty = 10f; // °¨¼ÒÇÒ ½Ã°£
+    [SerializeField] private float timePenalty = 10f; // ê°ì ë  ì‹œê°„
 
     private RectTransform rectTransform;
     private Canvas canvas;
     private RectTransform canvasRect;
     private Vector2 originalPosition;
-    private CanvasGroup chatbotCanvasGroup;
+    private CanvasGroup logicBCanvasGroup;
 
     private int clearClickCount = 0;
-    private int chatbotClickCount = 0;
+    private int logicBClickCount = 0;
     private bool isHiding = false;
     private bool isRevealed = false;
     private bool isActive = false;
@@ -33,12 +34,12 @@ public class ButtonRandomMove : MonoBehaviour, IPointerClickHandler
         originalPosition = rectTransform.anchoredPosition;
         isReturnedToOrigin = false;
 
-        chatbotCanvasGroup = chatbotButton.gameObject.GetComponent<CanvasGroup>();
-        if (chatbotCanvasGroup == null)
-            chatbotCanvasGroup = chatbotButton.gameObject.AddComponent<CanvasGroup>();
+        logicBCanvasGroup = logicB.gameObject.GetComponent<CanvasGroup>();
+        if (logicBCanvasGroup == null)
+            logicBCanvasGroup = logicB.gameObject.AddComponent<CanvasGroup>();
 
-        chatbotButton.GetComponentInChildren<Button>().onClick.AddListener(OnChatbotClicked); // ÀÓÀ¯¹Ì ¼öÁ¤: Chatbot ¿ÀºêÁ§Æ® ±¸Á¶ º¯°æ
-        originalSiblingIndex = transform.GetSiblingIndex(); // ¿ì¼±¼øÀ§ ±â¾ï
+        logicB.GetComponentInChildren<Button>().onClick.AddListener(OnLogicBClicked);
+        originalSiblingIndex = transform.GetSiblingIndex(); // ìš°ì„ ìˆœìœ„ ê¸°ì–µ
     }
 
     public void StartSequence()
@@ -50,7 +51,7 @@ public class ButtonRandomMove : MonoBehaviour, IPointerClickHandler
 
     void Update()
     {
-        // ·£´ı ÀÌµ¿ ´Ü°èÀÏ ¶§¸¸ Æä³ÎÆ¼ Àû¿ë
+        // ëœë¤ ì´ë™ ë‹¨ê³„ê°€ ì•„ë‹ˆë©´ ë¬´ì‹œ
         if (!isActive) return;
 
         if (Input.GetMouseButtonDown(0))
@@ -84,7 +85,7 @@ public class ButtonRandomMove : MonoBehaviour, IPointerClickHandler
 
             if (clearClickCount < randomMoveCount)
             {
-                transform.SetAsLastSibling(); // ·£´ı ÁÂÇ¥·Î ÀÌµ¿ÇÏ´Â µ¿¾È ClearButtonÀÌ ÃÖ»ó´ÜÀ¸·Î ¿Ã¶ó¿À°Ô ÇÔ
+                transform.SetAsLastSibling(); // ëœë¤ ì¢Œí‘œë¡œ ì´ë™í•˜ëŠ” ë™ì•ˆ ClearButtonì„ ìµœìƒë‹¨ìœ¼ë¡œ ì˜¬ë¦¬ê¸° ìœ„í•¨
 
                 Vector2 canvasSize = canvasRect.rect.size;
                 Vector2 randomCanvasPos = new Vector2(
@@ -92,15 +93,15 @@ public class ButtonRandomMove : MonoBehaviour, IPointerClickHandler
                     Random.Range(-canvasSize.y * 0.4f, canvasSize.y * 0.4f)
                 );
 
-                // Canvas ÁÂÇ¥ ±âÁØ
+                // Canvas ì¢Œí‘œ ë³€í™˜
                 Vector3 worldPos = canvasRect.TransformPoint(new Vector3(randomCanvasPos.x, randomCanvasPos.y, 0));
                 Vector2 localPos = rectTransform.parent.InverseTransformPoint(worldPos);
                 rectTransform.anchoredPosition = localPos;
             }
             else if (clearClickCount >= randomMoveCount)
             {
-                transform.SetSiblingIndex(originalSiblingIndex); // ¿ø·¡ ¿ì¼±¼øÀ§·Î º¹±Í
-                rectTransform.position = chatbotButton.position + new Vector3(-1f, 1f, 0); // 2026-07-20 ÀÓÀ¯¹Ì ¼öÁ¤: Å¬¸®¾î ¹öÆ°À» ¸ŞÀÎ ÆĞ³Î ÇÏÀ§¿¡ µÎ¸é¼­ Å¬¸®¾î ¹öÆ°ÀÌ ÀÌµ¿ÇÏ´Â À§Ä¡ ¼öÁ¤
+                transform.SetSiblingIndex(originalSiblingIndex); // ì›ë˜ ìš°ì„ ìˆœìœ„ë¡œ ë³µêµ¬
+                rectTransform.position = logicB.position + (Vector3)hideOffset; // LogicB ì˜¤ë¸Œì íŠ¸ ë’¤ì— ìˆ¨ëŠ” ìœ„ì¹˜ë¡œ ì´ë™
                 isHiding = true;
                 isActive = false;
             }
@@ -111,30 +112,29 @@ public class ButtonRandomMove : MonoBehaviour, IPointerClickHandler
         {
             if (!isReturnedToOrigin)
             {
-                // Ã¹ Å¬¸¯ - ¿øÀ§Ä¡·Î º¹±Í
+                // ì²« í´ë¦­ - ì›ìœ„ì¹˜ë¡œ ë³µê·€
                 rectTransform.anchoredPosition = originalPosition;
                 isReturnedToOrigin = true;
             }
             else
             {
-                // 2026-07-20 ÀÓÀ¯¹Ì ¼öÁ¤
-                // µÎ ¹øÂ° Å¬¸¯ - ½ºÅ×ÀÌÁö Å¬¸®¾î Ã³¸®
+                // ë‘ ë²ˆì§¸ í´ë¦­ - ìŠ¤í…Œì´ì§€ í´ë¦¬ì–´ ì²˜ë¦¬
                 GameManager.GetInstance().OnStageClear();
             }
         }
     }
 
-    private void OnChatbotClicked()
+    private void OnLogicBClicked()
     {
         if (!isHiding) return;
 
-        chatbotClickCount++;
-        float alpha = 1f - ((float)chatbotClickCount / clicksToDisappear);
-        chatbotCanvasGroup.alpha = Mathf.Clamp01(alpha);
+        logicBClickCount++;
+        float alpha = 1f - ((float)logicBClickCount / clicksToDisappear);
+        logicBCanvasGroup.alpha = Mathf.Clamp01(alpha);
 
-        if (chatbotClickCount >= clicksToDisappear)
+        if (logicBClickCount >= clicksToDisappear)
         {
-            chatbotButton.gameObject.SetActive(false);
+            logicB.gameObject.SetActive(false);
             isHiding = false;
             isRevealed = true;
         }

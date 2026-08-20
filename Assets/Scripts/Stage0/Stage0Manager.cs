@@ -17,18 +17,36 @@ public class Stage00Manager : MonoBehaviour
     [SerializeField] private GameObject warningPopup;  // 인적사항 미입력 경고 팝업
     [SerializeField] private Button warningConfirmButton1; // 확인 버튼 1
     [SerializeField] private Button warningConfirmButton2;  // 확인 버튼 2
-
     [SerializeField] private LogicTrigger logicTrigger;
+
+    void Awake()
+    {
+        GameManager.OnGameStateChanged += HandleGameStateChanged;
+    }
+
+    void OnDestroy()
+    {
+        GameManager.OnGameStateChanged -= HandleGameStateChanged;
+    }
 
     void Start()
     {
         GameManager.GetInstance().StartGame(); // 2026-07-19 임유미 추가: 스테이지 진입 시 게임 상태 초기화
+        BGMManager.GetInstance().PlayBGM("stage0_main");
+
         examNumberButton.onClick.AddListener(OnClickExamNumberButton);
         searchButton.onClick.AddListener(OnClickSearchButton);
         warningConfirmButton1.onClick.AddListener(() => warningPopup.SetActive(false));
         warningConfirmButton2.onClick.AddListener(() => warningPopup.SetActive(false));
-
         examNumberInput.interactable = false; // 수험번호 직접 입력 불가
+    }
+
+    void HandleGameStateChanged(GameManager.GameState previous, GameManager.GameState current)
+    {
+        if (current == GameManager.GameState.StageClear)
+        {
+            BGMManager.GetInstance().PlayBGM("stage0_success");
+        }
     }
 
     // 수험번호 조회 버튼
@@ -39,7 +57,6 @@ public class Stage00Manager : MonoBehaviour
             warningPopup.SetActive(true);
             return;
         }
-
         // 랜덤 6자리 생성 (000000 ~ 999999)
         int randomNumber = Random.Range(0, 1000000);
         examNumberInput.text = randomNumber.ToString("D6"); // 앞자리 0 포함 6자리
@@ -55,7 +72,6 @@ public class Stage00Manager : MonoBehaviour
             warningPopup.SetActive(true);
             return; // 검사 실패면 여기서 끝
         }
-
         logicTrigger.OnClicked(); // 검사 통과 후에만 실행
     }
 }

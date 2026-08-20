@@ -16,13 +16,13 @@ public class TimerManager : MonoBehaviour
     public float timeLimit = 60f;
     public float TimeRemaining { get; private set; }
     public bool IsTimerRunning { get; private set; }
-    [SerializeField] private Text timerText; // ½Ã°£ Ç¥½Ã¿ë ÅØ½ºÆ® (¹ÎÃ¤Àº ¼öÁ¤)
-    [SerializeField] private Image timerBar; // Å¸ÀÌ¸Ó ¹Ù ÀÌ¹ÌÁö (¹ÎÃ¤Àº ¼öÁ¤)
+    [SerializeField] private Text timerText; // ï¿½Ã°ï¿½ Ç¥ï¿½Ã¿ï¿½ ï¿½Ø½ï¿½Æ® (ï¿½ï¿½Ã¤ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½)
+    [SerializeField] private Image timerBar; // Å¸ï¿½Ì¸ï¿½ ï¿½ï¿½ ï¿½Ì¹ï¿½ï¿½ï¿½ (ï¿½ï¿½Ã¤ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½)
     void Awake()
     {
         if (Instance == null) { Instance = this; DontDestroyOnLoad(gameObject); }
         else Destroy(gameObject);
-        SceneManager.sceneLoaded += OnSceneLoaded; // ¾À ·Îµå ÀÌº¥Æ® µî·Ï
+        SceneManager.sceneLoaded += OnSceneLoaded; // ï¿½ï¿½ ï¿½Îµï¿½ ï¿½Ìºï¿½Æ® ï¿½ï¿½ï¿½
     }
 
     public void StartTimer()
@@ -64,17 +64,17 @@ public class TimerManager : MonoBehaviour
         if (TimeRemaining <= 0)
             TimeRemaining = 0; 
 
-        // UI ¾÷µ¥ÀÌÆ®
+        // UI ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
         if (timerText != null)
         {
             int minutes = Mathf.FloorToInt(TimeRemaining / 60f);
             int seconds = Mathf.FloorToInt(TimeRemaining % 60f);
             int milliseconds = Mathf.FloorToInt((TimeRemaining * 100f) % 100f);
-            timerText.text = string.Format("³²Àº Á¢¼Ó ½Ã°£ {0:00}:{1:00}:{2:00}", minutes, seconds, milliseconds);
+            timerText.text = string.Format("ë‚¨ì€ ì ‘ì† ì‹œê°„ {0:00}:{1:00}:{2:00}", minutes, seconds, milliseconds);
         }
         UpdateTimerBar();
 
-        // Å¸ÀÌ¸Ó °ªÀÌ 0 ÀÌÇÏ°¡ µÆÀ» ¶§ °ÔÀÓ ¿À¹ö ·ÎÁ÷
+        // Å¸ï¿½Ì¸ï¿½ ï¿½ï¿½ï¿½ï¿½ 0 ï¿½ï¿½ï¿½Ï°ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         if (TimeRemaining <= 0)
         {
             StopTimer();
@@ -82,29 +82,32 @@ public class TimerManager : MonoBehaviour
         }
     }
 
-    // ³²Àº ½Ã°£¿¡ µû¸¥ Å¸ÀÌ¸Ó ¹ÙÀÇ »ö»ó º¯È­ (¹ÎÃ¤Àº ¼öÁ¤)
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½Ã°ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Å¸ï¿½Ì¸ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È­ (ï¿½ï¿½Ã¤ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½)
     private void UpdateTimerBar()
     {
         timerBar.fillAmount = TimeRemaining / timeLimit;
         if (TimeRemaining <= 15f)
-            timerBar.color = new Color32(255, 61, 0, 255); 
+        {
+            timerBar.color = new Color32(255, 61, 0, 255);
+            BGMManager.GetInstance().PlayBGM("stage0_fast"); // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½È¯ (Stage0 ï¿½ï¿½ï¿½ï¿½)
+        }
         else if (TimeRemaining <= 30f)
             timerBar.color = new Color32(255, 160, 0, 255); 
         else
             timerBar.color = new Color32(29, 233, 182, 255); 
     }
 
-    // ½Ã°£ °¨¼Ò ÇÔ¼ö (¹ÎÃ¤Àº ¼öÁ¤)
+    // ï¿½Ã°ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½ (ï¿½ï¿½Ã¤ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½)
     public void ReduceTime(float amount)
     {
         TimeRemaining = Mathf.Max(0, TimeRemaining - amount);
     }
 
-    // ¾À ·ÎµåµÉ ¶§¸¶´Ù Å¸ÀÌ¸Ó ÃÊ±âÈ­ (¹ÎÃ¤Àº ¼öÁ¤)
+    // ï¿½ï¿½ ï¿½Îµï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Å¸ï¿½Ì¸ï¿½ ï¿½Ê±ï¿½È­ (ï¿½ï¿½Ã¤ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½)
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         StopTimer();
-        // »õ ¾À¿¡¼­ timerText ´Ù½Ã Ã£±â
+        // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ timerText ï¿½Ù½ï¿½ Ã£ï¿½ï¿½
         GameObject textObj = GameObject.Find("TimerText"); 
         if (textObj != null)
             timerText = textObj.GetComponent<Text>();
@@ -121,6 +124,6 @@ public class TimerManager : MonoBehaviour
 
     private void OnDestroy()
     {
-        SceneManager.sceneLoaded -= OnSceneLoaded; // ÀÌº¥Æ® ÇØÁ¦
+        SceneManager.sceneLoaded -= OnSceneLoaded; // ï¿½Ìºï¿½Æ® ï¿½ï¿½ï¿½ï¿½
     }
 }

@@ -56,32 +56,32 @@ public class GameManager : MonoBehaviour
     // 플레이 상태 관리 함수들
     public void StartGame()
     {
-        TimerManager.GetInstance().StartTimer(); // 타이머 시작
+        TimerManager.GetInstance().StartTimer(); // 타이머 시작 여부는 TimerManager가 자체 판단
         ChangeState(GameState.Playing);
     }
 
     public void OnStageClear()
     {
-        TimerManager.GetInstance().StopTimer(); // 타이머 정지
+        TimerManager.GetInstance().StopTimer();
         ChangeState(GameState.StageClear);
     }
 
     public void OnGameOver()
     {
-        TimerManager.GetInstance().StopTimer(); // 타이머 정지
+        TimerManager.GetInstance().StopTimer();
         ChangeState(GameState.GameOver);
     }
 
     public void PauseGame()
     {
-        TimerManager.GetInstance().PauseTimer(); // 타이머 일시정지
+        TimerManager.GetInstance().PauseTimer();
         Time.timeScale = 0;
         ChangeState(GameState.Paused);
     }
 
     public void ResumeGame()
     {
-        TimerManager.GetInstance().ResumeTimer(); // 타이머 재개
+        TimerManager.GetInstance().ResumeTimer();
         Time.timeScale = 1;
         ChangeState(GameState.Playing);
     }
@@ -92,5 +92,4 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1; // Paused 상태였을 경우 시간 흐름 복구 
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
-
 }

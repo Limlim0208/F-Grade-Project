@@ -38,10 +38,13 @@ public class ButtonRandomMove : MonoBehaviour, IPointerClickHandler
 
         logicB.GetComponentInChildren<Button>().onClick.AddListener(OnLogicBClicked);
         originalSiblingIndex = transform.GetSiblingIndex(); // 우선순위 기억
+
+        logicB.gameObject.SetActive(false); // 패턴 B 시작 전엔 꺼둠 (우선순위 꼬임 방지)
     }
 
     public void StartSequence()
     {
+        logicB.gameObject.SetActive(true); // 패턴 B가 실제로 시작될 때만 활성화
         isActive = true;
         clearClickCount = 0;
         isReturnedToOrigin = false;

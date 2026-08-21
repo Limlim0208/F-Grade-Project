@@ -62,4 +62,12 @@ public class StageProgressManager : MonoBehaviour
         SceneChanger.GetInstance().LoadScene("StartScene");
     }
 
+    // 2016-08-20 임유미 수정
+    // 해당 스테이지가 현재 진입 가능한지 여부
+    // 스테이지 0부터 시작, CurrentStage까지(포함) 진입 가능
+    public bool IsStageUnlocked(int stageId)
+    {
+        return stageId <= CurrentStage;
+    }
+
 }

@@ -74,7 +74,11 @@ public class ButtonRandomMove : MonoBehaviour, IPointerClickHandler
             }
 
             if (!clickedOnClear)
+            {
                 TimerManager.GetInstance().ReduceTime(timePenalty);
+                BGMManager.GetInstance().SkipForward(timePenalty); // 깎인 시간만큼 브금도 앞으로 건너뜀
+                SFXManager.GetInstance().PlaySFX("error");
+            }
         }
     }
 

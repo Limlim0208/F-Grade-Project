@@ -75,4 +75,11 @@ public class BGMManager : MonoBehaviour
     {
         audioSource.volume = Mathf.Clamp01(volume);
     }
+
+    // 현재 재생 중인 곡의 재생 위치를 seconds만큼 앞으로 건너뜀
+    public void SkipForward(float seconds)
+    {
+        if (audioSource.clip == null) return;
+        audioSource.time = Mathf.Min(audioSource.time + seconds, audioSource.clip.length - 0.01f);
+    }
 }

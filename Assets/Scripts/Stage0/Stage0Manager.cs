@@ -32,7 +32,7 @@ public class Stage00Manager : MonoBehaviour
     void Start()
     {
         GameManager.GetInstance().StartGame(); // 2026-07-19 임유미 추가: 스테이지 시작 시 게임 상태 초기화
-        BGMManager.GetInstance().PlayBGM("stage0_main");
+        BGMManager.GetInstance().PlayBGM("stage0_bgm");
 
         examNumberButton.onClick.AddListener(OnClickExamNumberButton);
         warningConfirmButton1.onClick.AddListener(() => warningPopup.SetActive(false));
@@ -44,7 +44,11 @@ public class Stage00Manager : MonoBehaviour
     {
         if (current == GameManager.GameState.StageClear)
         {
-            BGMManager.GetInstance().PlayBGM("stage0_success");
+            BGMManager.GetInstance().PlayBGM("clear_bgm");
+        }
+        else if (current == GameManager.GameState.GameOver)
+        {
+            BGMManager.GetInstance().PlayBGM("fail_bgm");
         }
     }
 
@@ -54,6 +58,7 @@ public class Stage00Manager : MonoBehaviour
         if (string.IsNullOrEmpty(nameInput.text) || string.IsNullOrEmpty(birthInput.text))
         {
             warningPopup.SetActive(true);
+            SFXManager.GetInstance().PlaySFX("error");
             return;
         }
 

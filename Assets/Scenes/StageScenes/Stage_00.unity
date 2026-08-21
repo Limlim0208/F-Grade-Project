@@ -3517,8 +3517,8 @@ RectTransform:
   - {fileID: 8523343826259518886}
   - {fileID: 288116744}
   - {fileID: 859647090}
-  - {fileID: 1043949551}
   - {fileID: 64797867}
+  - {fileID: 1043949551}
   - {fileID: 1223423497}
   - {fileID: 1117917210}
   - {fileID: 1500800086}
@@ -11350,6 +11350,9 @@ MonoBehaviour:
   timeLimit: 60
   timerText: {fileID: 859647088}
   timerBar: {fileID: 8756046699104347488}
+  scenesWithoutTimer:
+  - StartScene
+  - StageSelectScene
 --- !u!4 &1564805729
 Transform:
   m_ObjectHideFlags: 0

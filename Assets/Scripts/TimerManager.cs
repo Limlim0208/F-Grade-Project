@@ -111,10 +111,7 @@ public class TimerManager : MonoBehaviour
 
         timerBar.fillAmount = TimeRemaining / timeLimit;
         if (TimeRemaining <= 15f)
-        {
             timerBar.color = new Color32(255, 61, 0, 255);
-            BGMManager.GetInstance().PlayBGM("stage0_fast"); // 남은 시간 얼마 없을 때 브금 전환 (Stage0 공용)
-        }
         else if (TimeRemaining <= 30f)
             timerBar.color = new Color32(255, 160, 0, 255);
         else

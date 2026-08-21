@@ -4,18 +4,18 @@ using TMPro;
 
 public class Stage00Manager : MonoBehaviour
 {
-    [Header("�Է� �ʵ�")]
-    [SerializeField] private TMP_InputField nameInput;          //�̸�
-    [SerializeField] private TMP_InputField birthInput;         //�������
-    [SerializeField] private TMP_InputField examNumberInput;    //��ȣ
+    [Header("입력 필드")]
+    [SerializeField] private TMP_InputField nameInput;          //이름
+    [SerializeField] private TMP_InputField birthInput;         //생년월일
+    [SerializeField] private TMP_InputField examNumberInput;    //번호
 
-    [Header("��ư")]
-    [SerializeField] private Button examNumberButton;  // �����ȣ ��ȸ ��ư
+    [Header("버튼")]
+    [SerializeField] private Button examNumberButton;  // 수험번호 조회 버튼
 
-    [Header("�˾�")]
-    [SerializeField] private GameObject warningPopup;  // �������� ���Է� ��� �˾�
-    [SerializeField] private Button warningConfirmButton1; // Ȯ�� ��ư 1
-    [SerializeField] private Button warningConfirmButton2;  // Ȯ�� ��ư 2
+    [Header("팝업")]
+    [SerializeField] private GameObject warningPopup;  // 필수정보 미입력 경고 팝업
+    [SerializeField] private Button warningConfirmButton1; // 확인 버튼 1
+    [SerializeField] private Button warningConfirmButton2;  // 확인 버튼 2
 
     [SerializeField] private ExamSearchCompletePopupCaller examSearchCompletePopupCaller;
 
@@ -31,13 +31,13 @@ public class Stage00Manager : MonoBehaviour
 
     void Start()
     {
-        GameManager.GetInstance().StartGame(); // 2026-07-19 ������ �߰�: �������� ���� �� ���� ���� �ʱ�ȭ
+        GameManager.GetInstance().StartGame(); // 2026-07-19 임유미 추가: 스테이지 시작 시 게임 상태 초기화
         BGMManager.GetInstance().PlayBGM("stage0_main");
 
         examNumberButton.onClick.AddListener(OnClickExamNumberButton);
         warningConfirmButton1.onClick.AddListener(() => warningPopup.SetActive(false));
         warningConfirmButton2.onClick.AddListener(() => warningPopup.SetActive(false));
-        examNumberInput.interactable = false; // �����ȣ ���� �Է� �Ұ�
+        examNumberInput.interactable = false; // 수험번호 직접 입력 불가
     }
 
     void HandleGameStateChanged(GameManager.GameState previous, GameManager.GameState current)
@@ -48,7 +48,7 @@ public class Stage00Manager : MonoBehaviour
         }
     }
 
-    // �����ȣ ��ȸ ��ư
+    // 수험번호 조회 버튼
     private void OnClickExamNumberButton()
     {
         if (string.IsNullOrEmpty(nameInput.text) || string.IsNullOrEmpty(birthInput.text))
@@ -57,6 +57,6 @@ public class Stage00Manager : MonoBehaviour
             return;
         }
 
-        examSearchCompletePopupCaller.ShowPopup(); // �˾� Ȯ�� Ŭ�� �� ���ȣ ���� + ���� ���� (ExamSearchCompletePopupCaller���� ó��)
+        examSearchCompletePopupCaller.ShowPopup(); // 팝업 확인 클릭 시 수험번호 생성 + 로직 시작 (ExamSearchCompletePopupCaller에서 처리)
     }
 }

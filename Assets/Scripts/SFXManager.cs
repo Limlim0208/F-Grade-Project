@@ -41,6 +41,7 @@ public class SFXManager : MonoBehaviour
     }
 
     private const float ClickVolumeScale = 0.8f;
+    private const float ErrorVolumeScale = 1.2f;
 
     void LateUpdate()
     {
@@ -59,7 +60,8 @@ public class SFXManager : MonoBehaviour
         if (clipName != "click")
             suppressClickThisFrame = true; // 이번 프레임 자동 클릭음은 생략
 
-        PlayClip(clipName, 1f);
+        float volumeScale = clipName == "error" ? ErrorVolumeScale : 1f;
+        PlayClip(clipName, volumeScale);
     }
 
     private void PlayClip(string clipName, float volumeScale)

@@ -61,6 +61,7 @@ public class BGMManager : MonoBehaviour
         }
 
         audioSource.clip = clip;
+        audioSource.loop = clipName != "fail_bgm"; // fail_bgm은 루프 없이 한 번만 재생
         audioSource.Play();
         currentClipName = clipName;
     }

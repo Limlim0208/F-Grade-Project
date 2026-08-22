@@ -7,6 +7,9 @@ public class ButtonRandomMove : MonoBehaviour, IPointerClickHandler
     [Header("숨을 위치 오브젝트")]
     [SerializeField] private RectTransform logicB;
     [SerializeField] private Vector2 hideOffset = Vector2.zero;
+    [Header("부서지는 이미지 (img_signboard 기본 -> _1~_5 순서)")]
+    [SerializeField] private Image logicBImage;
+    [SerializeField] private Sprite[] crackedSprites;
     [Header("설정")]
     [SerializeField] private int randomMoveCount = 3;
     [SerializeField] private int clicksToDisappear = 5;
@@ -16,7 +19,6 @@ public class ButtonRandomMove : MonoBehaviour, IPointerClickHandler
     private Canvas canvas;
     private RectTransform canvasRect;
     private Vector2 originalPosition;
-    private CanvasGroup logicBCanvasGroup;
 
     private int clearClickCount = 0;
     private int logicBClickCount = 0;
@@ -34,16 +36,15 @@ public class ButtonRandomMove : MonoBehaviour, IPointerClickHandler
         originalPosition = rectTransform.anchoredPosition;
         isReturnedToOrigin = false;
 
-        logicBCanvasGroup = logicB.gameObject.GetComponent<CanvasGroup>();
-        if (logicBCanvasGroup == null)
-            logicBCanvasGroup = logicB.gameObject.AddComponent<CanvasGroup>();
-
         logicB.GetComponentInChildren<Button>().onClick.AddListener(OnLogicBClicked);
         originalSiblingIndex = transform.GetSiblingIndex(); // 우선순위 기억
+
+        logicB.gameObject.SetActive(false); // 패턴 B 시작 전엔 꺼둠 (우선순위 꼬임 방지)
     }
 
     public void StartSequence()
     {
+        logicB.gameObject.SetActive(true); // 패턴 B가 실제로 시작될 때만 활성화
         isActive = true;
         clearClickCount = 0;
         isReturnedToOrigin = false;
@@ -73,7 +74,11 @@ public class ButtonRandomMove : MonoBehaviour, IPointerClickHandler
             }
 
             if (!clickedOnClear)
+            {
                 TimerManager.GetInstance().ReduceTime(timePenalty);
+                BGMManager.GetInstance().SkipForward(timePenalty); // 깎인 시간만큼 브금도 앞으로 건너뜀
+                SFXManager.GetInstance().PlaySFX("error");
+            }
         }
     }
 
@@ -129,8 +134,13 @@ public class ButtonRandomMove : MonoBehaviour, IPointerClickHandler
         if (!isHiding) return;
 
         logicBClickCount++;
-        float alpha = 1f - ((float)logicBClickCount / clicksToDisappear);
-        logicBCanvasGroup.alpha = Mathf.Clamp01(alpha);
+
+        // 클릭할 때마다 부서짐 단계 이미지로 교체 (crackedSprites[0] = _1, ...)
+        if (logicBImage != null && crackedSprites != null && crackedSprites.Length > 0)
+        {
+            int spriteIndex = Mathf.Clamp(logicBClickCount - 1, 0, crackedSprites.Length - 1);
+            logicBImage.sprite = crackedSprites[spriteIndex];
+        }
 
         if (logicBClickCount >= clicksToDisappear)
         {

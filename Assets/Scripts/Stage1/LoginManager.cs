@@ -5,24 +5,24 @@ using System.Collections;
 
 public class LoginManager : MonoBehaviour
 {
-    [Header("ÀÔ·Â ÇÊµå")]
+    [Header("ï¿½Ô·ï¿½ ï¿½Êµï¿½")]
     public TMP_InputField studentIdField;
     public TMP_InputField passwordField;
 
-    [Header("¹öÆ°")]
+    [Header("ï¿½ï¿½Æ°")]
     public Button loginButton;
 
-    // [Header("¾Ë¸² ÆË¾÷")]
+    // [Header("ï¿½Ë¸ï¿½ ï¿½Ë¾ï¿½")]
     // public GameObject alertPanel;
     // public TMP_Text alertText;
 
-    [Header("¿¬Ãâ")]
+    [Header("ï¿½ï¿½ï¿½ï¿½")]
     public GameObject inputPopup;
     public Image overlayImage;
     public GameObject checkboxPopup;
     public GameObject minigamePopup;
 
-    [Header("Ã¼Å©¹Ú½º")]
+    [Header("Ã¼Å©ï¿½Ú½ï¿½")]
     public Toggle robotCheckbox;
     public Image checkboxBackground;
 
@@ -36,6 +36,8 @@ public class LoginManager : MonoBehaviour
         passwordField.contentType = TMP_InputField.ContentType.Password;
 
         loginButton.onClick.AddListener(OnLoginClicked);
+
+        BGMManager.GetInstance().PlayBGM("stage1_bgm");
 
         // alertPanel.SetActive(false);
         overlayImage.gameObject.SetActive(false);
@@ -65,10 +67,12 @@ public class LoginManager : MonoBehaviour
 
     IEnumerator ShowAlertAndReturn()
     {
-        // alertText.text = "¿Ã¹Ù¸¥ ºñ¹Ð¹øÈ£¸¦ ÀÔ·ÂÇÏ¼¼¿ä.";
+        // alertText.text = "ï¿½Ã¹Ù¸ï¿½ ï¿½ï¿½Ð¹ï¿½È£ï¿½ï¿½ ï¿½Ô·ï¿½ï¿½Ï¼ï¿½ï¿½ï¿½.";
         // alertPanel.SetActive(true);
         // yield return new WaitForSeconds(2f);
         // alertPanel.SetActive(false);
+
+        SFXManager.GetInstance().PlaySFX("error");
 
         yield return null;
         SceneChanger.Instance.LoadScene("StageSelectScene");

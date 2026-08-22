@@ -239,6 +239,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1182986848}
     m_Modifications:
+    - target: {fileID: 34194794738913033, guid: 9c5bf9b623c88bb46b23f26e59bdaa0e, type: 3}
+      propertyPath: sceneName
+      value: StartScene
+      objectReference: {fileID: 0}
     - target: {fileID: 742058874229308876, guid: 9c5bf9b623c88bb46b23f26e59bdaa0e, type: 3}
       propertyPath: m_Name
       value: UI_NavigationBar

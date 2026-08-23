@@ -7,9 +7,10 @@ public class Enums
         No,
         Confirm,
         Close,
+        Cancel,
         Replay,
         GoHome,
         FinishGame,
-        Start
+        Start,
     }
 }

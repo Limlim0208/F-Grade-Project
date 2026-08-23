@@ -53,6 +53,11 @@ public class PopupCallerTemplate : MonoBehaviour
                         // 닫기 버튼을 눌렀을 때 작동할 코드 추가
                         break;
 
+                    case Enums.PopupButtonType.Cancel:
+                        PopupManager.Instance.CloseCurrentActivePopup();
+                        // 취소 시 동작 추가
+                        break;
+
                     case Enums.PopupButtonType.Replay:
                         PopupManager.Instance.CloseCurrentActivePopup();
                         // 다시하기 버튼을 눌렀을 때 작동할 코드 추가

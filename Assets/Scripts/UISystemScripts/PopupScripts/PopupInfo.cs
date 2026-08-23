@@ -1,7 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System;
+using UnityEngine.Windows;
 
 public class PopupInfo
 {
@@ -11,6 +12,13 @@ public class PopupInfo
     public Enums.PopupButtonType[] ButtonTypes { get; private set; }
     public Action<Enums.PopupButtonType> Listener { get; private set; }
 
+
+    // === input 타입 ===
+    public bool HasInput { get; private set; }
+    public string InputPlaceholder { get; private set; }
+    public string InputDefaultValue { get; private set; }
+    public int InputMaxLength { get; private set; }
+
     private PopupInfo(Builder builder)
     {
         Title = builder.Title;
@@ -18,6 +26,12 @@ public class PopupInfo
         PauseScene = builder.PauseScene;
         ButtonTypes = builder.ButtonTypes;
         Listener = builder.Listener;
+
+        // === inputtype ===
+        HasInput = builder.HasInput;
+        InputPlaceholder = builder.InputPlaceholder;
+        InputDefaultValue = builder.InputDefaultValue;
+        InputMaxLength = builder.InputMaxLength;
     }
 
     // 하위 Builder클래스
@@ -29,6 +43,13 @@ public class PopupInfo
         public Enums.PopupButtonType[] ButtonTypes { get; private set; }
         public Action<Enums.PopupButtonType> Listener { get; private set; }
 
+        // === input type ===
+        public bool HasInput { get; private set; }
+        public string InputPlaceholder { get; private set; }
+        public string InputDefaultValue { get; private set; }
+        public int InputMaxLength { get; private set; }
+
+
         public Builder()
         {
             Title = string.Empty;
@@ -36,6 +57,12 @@ public class PopupInfo
             ButtonTypes = null;
             Listener = null;
             PauseScene = false;
+
+            // === input type ===
+            HasInput = false;
+            InputPlaceholder = string.Empty;
+            InputDefaultValue = string.Empty;
+            InputMaxLength = 0;
         }
 
         // 제목 세팅
@@ -72,6 +99,17 @@ public class PopupInfo
             this.PauseScene = isPause;
             return this;
         }
+        
+        //텍스트 입력 팝업
+        public Builder SetInput(string placeholder = "", string defaultValue = "", int maxLength = 0)
+        {
+            this.HasInput = true;
+            this.InputPlaceholder = placeholder;
+            this.InputDefaultValue = defaultValue;
+            this.InputMaxLength = maxLength;
+            return this;
+        }
+
 
         // 최종 빌드
         public PopupInfo Build()

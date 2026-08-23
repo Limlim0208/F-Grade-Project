@@ -15,6 +15,8 @@ public class Popup : MonoBehaviour
     protected Transform buttonParent;
     [SerializeField]
     protected PopupButton buttonPrefab;
+    [SerializeField]
+    protected TMP_InputField inputField;
 
     protected Action<Enums.PopupButtonType> buttonClickedAction;
     protected List<PopupButton> myButtons = new List<PopupButton>();
@@ -27,11 +29,41 @@ public class Popup : MonoBehaviour
         // 제목 세팅
         titleText.text = info.Title;
         // 컨텐츠 세팅
-        contentText.text = info.Content;
+        bool hasContent = !string.IsNullOrEmpty(info.Content);
+        contentText.gameObject.SetActive(hasContent);
+        if (hasContent)
+            contentText.text = info.Content;
         // 콜백 세팅
         buttonClickedAction = info.Listener;
         // 버튼 세팅
         SetButtons(info.ButtonTypes);
+        // 인풋 필드 세팅
+        SetInput(info);
+    }
+
+    protected virtual void SetInput(PopupInfo info)
+    {
+        if (inputField == null)
+            return;
+
+        if (!info.HasInput)
+        {
+            inputField.gameObject.SetActive(false);
+            return;
+        }
+
+        inputField.gameObject.SetActive(true);
+        inputField.text = info.InputDefaultValue ?? string.Empty;
+
+        if (inputField.placeholder is TMP_Text placeholderText)
+            placeholderText.text = info.InputPlaceholder ?? string.Empty;
+
+        inputField.characterLimit = info.InputMaxLength;
+    }
+
+    public string GetInputText()
+    {
+        return inputField != null ? inputField.text : null;
     }
 
     protected virtual void SetButtons(Enums.PopupButtonType[] buttonTypes)

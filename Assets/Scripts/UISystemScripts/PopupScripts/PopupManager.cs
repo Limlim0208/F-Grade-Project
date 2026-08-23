@@ -57,6 +57,12 @@ public class PopupManager : MonoBehaviour
         }
     }
 
+    // 현재 입력값 조회용 헬퍼
+    public string GetCurrentInputText()
+    {
+        return currentActivePopup != null ? currentActivePopup.GetInputText() : null;
+    }
+
     //// 테스트용 팝업 코드
     //private void Update()
     //{

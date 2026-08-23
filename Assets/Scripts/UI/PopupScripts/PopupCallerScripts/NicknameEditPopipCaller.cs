@@ -7,7 +7,7 @@ public class NicknameEditPopupCaller : MonoBehaviour
         var info = new PopupInfo.Builder()
             .SetTitle("이름 변경")
             .SetInput(placeholder: "변경할 이름을 입력해주세요.", maxLength: 8)
-            .SetButtons(Enums.PopupButtonType.Confirm, Enums.PopupButtonType.Close)
+            .SetButtons(Enums.PopupButtonType.Confirm, Enums.PopupButtonType.Cancel)
             .SetListener((type) =>
             {
                 switch (type)

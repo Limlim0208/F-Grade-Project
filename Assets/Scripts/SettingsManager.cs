@@ -12,6 +12,16 @@ public class SettingsManager : MonoBehaviour
     public string Nickname { get; private set; } = "신입생";
     public event Action<string> OnNicknameChanged;
 
+    // === 프로필 이미지 상태 ===
+    [SerializeField] private Sprite[] availableProfileImages;
+    private const string ProfileImageIndexKey = "PROFILE_IMAGE_INDEX";
+    public int ProfileImageIndex { get; private set; } = 0;
+    public Sprite CurrentProfileSprite =>
+        (availableProfileImages != null && ProfileImageIndex < availableProfileImages.Length)
+            ? availableProfileImages[ProfileImageIndex] : null;
+    public Sprite[] AvailableProfileImages => availableProfileImages;
+    public event Action<Sprite> OnProfileImageChanged;
+
     void Awake()
     {
         if (Instance == null)
@@ -19,6 +29,8 @@ public class SettingsManager : MonoBehaviour
             Instance = this;
             DontDestroyOnLoad(gameObject);
             Nickname = PlayerPrefs.GetString(NicknameKey, "신입생");
+
+            ProfileImageIndex = PlayerPrefs.GetInt(ProfileImageIndexKey, 0);
         }
         else Destroy(gameObject);
     }
@@ -72,4 +84,19 @@ public class SettingsManager : MonoBehaviour
         return true;
 
     }
+
+    // 프로필 사진 상태 관리
+    public bool TrySetProfileImage(int index)
+    {
+        if (availableProfileImages == null || index < 0 || index >= availableProfileImages.Length)
+            return false;
+
+        ProfileImageIndex = index;
+        PlayerPrefs.SetInt(ProfileImageIndexKey, index);
+        PlayerPrefs.Save();
+
+        OnProfileImageChanged?.Invoke(CurrentProfileSprite);
+        return true;
+    }
+
 }

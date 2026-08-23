@@ -433,7 +433,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 56.31, y: -66.705}
+  m_AnchoredPosition: {x: 222.5, y: -66.705}
   m_SizeDelta: {x: 72.62, y: 33.41}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1744309217668022144
@@ -673,7 +673,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4281479730
+    rgba: 4278190080
   m_fontColor: {r: 0, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -1035,7 +1035,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 222.5, y: -158.41}
+  m_AnchoredPosition: {x: 222.5, y: -75}
   m_SizeDelta: {x: 405, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4921231288129059564
@@ -1297,8 +1297,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 56.31, y: -157.41}
-  m_SizeDelta: {x: 72.62, y: 48}
+  m_AnchoredPosition: {x: 222.5, y: -157.41}
+  m_SizeDelta: {x: 405, y: 48}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &931612608979456066
 MonoBehaviour:
@@ -1319,9 +1319,9 @@ MonoBehaviour:
     m_Bottom: 0
   m_ChildAlignment: 4
   m_Spacing: 10
-  m_ChildForceExpandWidth: 1
+  m_ChildForceExpandWidth: 0
   m_ChildForceExpandHeight: 0
-  m_ChildControlWidth: 1
+  m_ChildControlWidth: 0
   m_ChildControlHeight: 0
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
@@ -1498,7 +1498,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 222.5, y: -153.705}
-  m_SizeDelta: {x: 112.62, y: 201.41}
+  m_SizeDelta: {x: 445, y: 201.41}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &6827558614771358641
 MonoBehaviour:
@@ -1538,7 +1538,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_HorizontalFit: 2
+  m_HorizontalFit: 0
   m_VerticalFit: 2
 --- !u!1 &7800579547867431882
 GameObject:

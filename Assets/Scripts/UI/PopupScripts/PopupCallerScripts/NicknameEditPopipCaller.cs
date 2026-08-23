@@ -19,7 +19,7 @@ public class NicknameEditPopupCaller : MonoBehaviour
                         // 실패 시 팝업 유지 (에러 처리는 아래 참고)
                         break;
 
-                    case Enums.PopupButtonType.Close:
+                    case Enums.PopupButtonType.Cancel:
                         PopupManager.Instance.CloseCurrentActivePopup();
                         break;
                 }

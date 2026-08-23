@@ -166,21 +166,21 @@ MonoBehaviour:
   - buttonType: 4
     info:
       buttonText: "\uB2EB\uAE30"
-  - buttonType: 6
-    info:
-      buttonText: "\uB2E4\uC2DC\uD558\uAE30"
-  - buttonType: 6
-    info:
-      buttonText: "\uBA54\uC778\uD654\uBA74\uC73C\uB85C"
-  - buttonType: 7
-    info:
-      buttonText: "\uAC8C\uC784\uC885\uB8CC"
-  - buttonType: 8
-    info:
-      buttonText: "\uC2DC\uC791\uD558\uAE30"
   - buttonType: 5
     info:
       buttonText: "\uCDE8\uC18C"
+  - buttonType: 6
+    info:
+      buttonText: "\uB2E4\uC2DC\uD558\uAE30"
+  - buttonType: 7
+    info:
+      buttonText: "\uBA54\uC778\uD654\uBA74\uC73C\uB85C"
+  - buttonType: 8
+    info:
+      buttonText: "\uAC8C\uC784\uC885\uB8CC"
+  - buttonType: 9
+    info:
+      buttonText: "\uC2DC\uC791\uD558\uAE30"
 --- !u!223 &1107183908137045183
 Canvas:
   m_ObjectHideFlags: 0

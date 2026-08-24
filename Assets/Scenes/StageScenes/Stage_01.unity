@@ -11381,9 +11381,9 @@ MonoBehaviour:
   popupPrefab: {fileID: 888654113407225210, guid: 0497c4221e3d7d54bb937937b0e7d258, type: 3}
   popupParent: {fileID: 756580086}
   windowStartSecondsBeforeTarget: 120
-  windowEndSecondsBeforeTarget: 30
-  minPopupCount: 2
-  maxPopupCount: 4
+  windowEndSecondsBeforeTarget: 15
+  minPopupCount: 5
+  maxPopupCount: 10
   randomPosMin: {x: -300, y: -200}
   randomPosMax: {x: 300, y: 200}
 --- !u!4 &2041035213

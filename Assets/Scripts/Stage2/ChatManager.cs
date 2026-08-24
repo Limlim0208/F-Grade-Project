@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -22,6 +23,13 @@ public class ChatManager : MonoBehaviour
     [Header("날짜 구분자")]
     [SerializeField] private DateDividerView dateDividerPrefab;
 
+    [Header("초대 알림")]
+    [SerializeField] private InviteNotificationView inviteNotificationPrefab;
+
+    [Header("선택지")]
+    [SerializeField] private ChoiceButtonView choiceButtonPrefab;
+    [SerializeField] private Transform choiceContainer;
+
     [System.Serializable]
     public class CharacterPortrait
     {
@@ -33,16 +41,19 @@ public class ChatManager : MonoBehaviour
     [SerializeField] private Image portraitImage;
     [SerializeField] private List<CharacterPortrait> characterPortraits;
 
+    [Header("그룹 일러스트 (실루엣 -> 본모습, 선택)")]
+    [SerializeField] private GroupIllustrationView groupIllustration;
+
     private Coroutine playRoutine;
     private ChatItem previousMessageItem; // 연속 메시지(꼬리 없음) 판단용
 
-    public void PlayChat(List<ChatItem> items)
+    public void PlayChat(List<ChatItem> items, Action onComplete = null)
     {
         if (playRoutine != null)
             StopCoroutine(playRoutine);
 
         previousMessageItem = null;
-        playRoutine = StartCoroutine(PlayChatRoutine(items));
+        playRoutine = StartCoroutine(PlayChatRoutine(items, onComplete));
     }
 
     public void StopChat()
@@ -54,28 +65,48 @@ public class ChatManager : MonoBehaviour
         }
     }
 
-    private IEnumerator PlayChatRoutine(List<ChatItem> items)
+    private IEnumerator PlayChatRoutine(List<ChatItem> items, Action onComplete)
+    {
+        yield return PlayItems(items);
+
+        playRoutine = null;
+        onComplete?.Invoke();
+    }
+
+    private IEnumerator PlayItems(List<ChatItem> items)
     {
         foreach (var item in items)
         {
-            if (item.itemType == ChatItemType.DateDivider)
+            switch (item.itemType)
             {
-                var divider = Instantiate(dateDividerPrefab, contentParent);
-                divider.SetDate(item.dateLabel);
-                previousMessageItem = null; // 날짜 구분자 다음엔 항상 꼬리 있는 말풍선부터 새로 시작
-            }
-            else
-            {
-                ChatBubbleView prefab = GetBubblePrefab(item);
-                var bubble = Instantiate(prefab, contentParent);
+                case ChatItemType.DateDivider:
+                    var divider = Instantiate(dateDividerPrefab, contentParent);
+                    divider.SetDate(item.dateLabel);
+                    previousMessageItem = null; // 날짜 구분자 다음엔 항상 꼬리 있는 말풍선부터 새로 시작
+                    break;
 
-                if (item.contentType == BubbleContentType.Attachment)
-                    bubble.SetAttachment(item.attachmentImage);
-                else
-                    bubble.SetText(item.text);
+                case ChatItemType.Invite:
+                    var invite = Instantiate(inviteNotificationPrefab, contentParent);
+                    invite.SetText(item.text);
+                    previousMessageItem = null;
+                    break;
 
-                UpdatePortrait(item);
-                previousMessageItem = item;
+                case ChatItemType.Choice:
+                    yield return PlayChoice(item);
+                    continue; // 선택지 처리(대기 + 반응 재생)는 자체적으로 스크롤/딜레이 처리하므로 아래 공통 처리 건너뜀
+
+                default: // Message
+                    ChatBubbleView prefab = GetBubblePrefab(item);
+                    var bubble = Instantiate(prefab, contentParent);
+
+                    if (item.contentType == BubbleContentType.Attachment)
+                        bubble.SetAttachment(item.attachmentImage);
+                    else
+                        bubble.SetText(item.text);
+
+                    UpdatePortrait(item);
+                    previousMessageItem = item;
+                    break;
             }
 
             yield return null; // 레이아웃 갱신 한 프레임 대기
@@ -83,8 +114,40 @@ public class ChatManager : MonoBehaviour
 
             yield return new WaitForSeconds(item.delayAfter);
         }
+    }
 
-        playRoutine = null;
+    private IEnumerator PlayChoice(ChatItem item)
+    {
+        bool chosen = false;
+        List<ChatItem> reactionItems = null;
+        var spawnedButtons = new List<GameObject>();
+
+        foreach (var choice in item.choices)
+        {
+            var btn = Instantiate(choiceButtonPrefab, choiceContainer);
+            spawnedButtons.Add(btn.gameObject);
+
+            var capturedChoice = choice;
+            btn.Setup(capturedChoice.choiceText, () =>
+            {
+                if (chosen) return; // 중복 클릭 방지
+                chosen = true;
+                reactionItems = capturedChoice.reactionItems;
+            });
+        }
+
+        yield return null;
+        ScrollToBottom();
+
+        yield return new WaitUntil(() => chosen);
+
+        foreach (var obj in spawnedButtons)
+            Destroy(obj);
+
+        previousMessageItem = null; // 선택지 이후엔 항상 꼬리 있는 말풍선부터 새로 시작
+
+        if (reactionItems != null)
+            yield return PlayItems(reactionItems);
     }
 
     private ChatBubbleView GetBubblePrefab(ChatItem item)
@@ -106,11 +169,16 @@ public class ChatManager : MonoBehaviour
     private void UpdatePortrait(ChatItem item)
     {
         // 플레이어가 말할 땐 직전 상대방 초상화를 그대로 유지
-        if (item.speaker != ChatSpeaker.Other || portraitImage == null) return;
+        if (item.speaker != ChatSpeaker.Other) return;
 
-        var match = characterPortraits.Find(p => p.speakerId == item.speakerId);
-        if (match != null)
-            portraitImage.sprite = match.portrait;
+        if (portraitImage != null)
+        {
+            var match = characterPortraits.Find(p => p.speakerId == item.speakerId);
+            if (match != null)
+                portraitImage.sprite = match.portrait;
+        }
+
+        groupIllustration?.Reveal(item.speakerId); // Day1 그룹 일러스트에 쓰는 경우 실루엣 자동 리빌
     }
 
     private void ScrollToBottom()

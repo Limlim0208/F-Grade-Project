@@ -945,6 +945,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   logicB: {fileID: 1043949551}
   hideOffset: {x: 0, y: 0}
+  headerPlaying: {fileID: 581894899}
   logicBImage: {fileID: 1043949553}
   crackedSprites:
   - {fileID: 21300000, guid: 781022251f85a6248bac442210d59a69, type: 3}

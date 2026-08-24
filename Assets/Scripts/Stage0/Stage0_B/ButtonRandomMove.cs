@@ -7,6 +7,7 @@ public class ButtonRandomMove : MonoBehaviour, IPointerClickHandler
     [Header("숨을 위치 오브젝트")]
     [SerializeField] private RectTransform logicB;
     [SerializeField] private Vector2 hideOffset = Vector2.zero;
+    [SerializeField] private GameObject headerPlaying; // LogicB 켜질 때 꺼지고, 꺼질 때 다시 켜지는 기존 헤더
     [Header("부서지는 이미지 (img_signboard 기본 -> _1~_5 순서)")]
     [SerializeField] private Image logicBImage;
     [SerializeField] private Sprite[] crackedSprites;
@@ -105,6 +106,7 @@ public class ButtonRandomMove : MonoBehaviour, IPointerClickHandler
             else if (clearClickCount >= randomMoveCount)
             {
                 transform.SetSiblingIndex(originalSiblingIndex); // 원래 우선순위로 복구
+                if (headerPlaying != null) headerPlaying.SetActive(false); // 기존 헤더 끄고
                 logicB.gameObject.SetActive(true); // 배너 뒤로 숨는 시점에만 활성화
                 rectTransform.position = logicB.position + (Vector3)hideOffset; // LogicB 오브젝트 뒤에 숨는 위치로 이동
                 isHiding = true;
@@ -145,6 +147,7 @@ public class ButtonRandomMove : MonoBehaviour, IPointerClickHandler
         if (logicBClickCount >= clicksToDisappear)
         {
             logicB.gameObject.SetActive(false);
+            if (headerPlaying != null) headerPlaying.SetActive(true); // 기존 헤더 다시 켜기
             isHiding = false;
             isRevealed = true;
         }

@@ -44,7 +44,6 @@ public class ButtonRandomMove : MonoBehaviour, IPointerClickHandler
 
     public void StartSequence()
     {
-        logicB.gameObject.SetActive(true); // 패턴 B가 실제로 시작될 때만 활성화
         isActive = true;
         clearClickCount = 0;
         isReturnedToOrigin = false;
@@ -106,6 +105,7 @@ public class ButtonRandomMove : MonoBehaviour, IPointerClickHandler
             else if (clearClickCount >= randomMoveCount)
             {
                 transform.SetSiblingIndex(originalSiblingIndex); // 원래 우선순위로 복구
+                logicB.gameObject.SetActive(true); // 배너 뒤로 숨는 시점에만 활성화
                 rectTransform.position = logicB.position + (Vector3)hideOffset; // LogicB 오브젝트 뒤에 숨는 위치로 이동
                 isHiding = true;
                 isActive = false;

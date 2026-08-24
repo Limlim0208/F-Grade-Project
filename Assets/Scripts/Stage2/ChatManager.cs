@@ -46,6 +46,7 @@ public class ChatManager : MonoBehaviour
 
     private Coroutine playRoutine;
     private ChatItem previousMessageItem; // 연속 메시지(꼬리 없음) 판단용
+    private RectTransform inviteRectTransform; // Invite만 스크롤뷰 정중앙에 고정 보정하기 위해 기억해둠
 
     public void PlayChat(List<ChatItem> items, Action onComplete = null)
     {
@@ -77,6 +78,8 @@ public class ChatManager : MonoBehaviour
     {
         foreach (var item in items)
         {
+            ChatBubbleView lastBubble = null; // 이번 루프에서 만든 말풍선(프사 정렬용) - 다음 루프에 안 넘어가게 매번 초기화
+
             switch (item.itemType)
             {
                 case ChatItemType.DateDivider:
@@ -87,7 +90,9 @@ public class ChatManager : MonoBehaviour
 
                 case ChatItemType.Invite:
                     var invite = Instantiate(inviteNotificationPrefab, contentParent);
+                    invite.gameObject.SetActive(true); // 원본 프리팹이 꺼져있어도 복제본은 항상 켜지도록
                     invite.SetText(item.text);
+                    inviteRectTransform = invite.transform as RectTransform;
                     previousMessageItem = null;
                     break;
 
@@ -96,13 +101,22 @@ public class ChatManager : MonoBehaviour
                     continue; // 선택지 처리(대기 + 반응 재생)는 자체적으로 스크롤/딜레이 처리하므로 아래 공통 처리 건너뜀
 
                 default: // Message
-                    ChatBubbleView prefab = GetBubblePrefab(item);
+                    bool isConsecutive = IsConsecutive(item);
+                    ChatBubbleView prefab = GetBubblePrefab(item, isConsecutive);
                     var bubble = Instantiate(prefab, contentParent);
+                    lastBubble = bubble;
 
                     if (item.contentType == BubbleContentType.Attachment)
                         bubble.SetAttachment(item.attachmentImage);
                     else
                         bubble.SetText(item.text);
+
+                    // 상대방이고, 연속 메시지가 아닐 때(꼬리 있는 첫 말풍선)만 프로필 사진 + 이름 표시
+                    if (item.speaker == ChatSpeaker.Other && !isConsecutive)
+                    {
+                        bubble.SetProfile(FindPortrait(item.speakerId));
+                        bubble.SetName(item.speakerId);
+                    }
 
                     UpdatePortrait(item);
                     previousMessageItem = item;
@@ -110,6 +124,9 @@ public class ChatManager : MonoBehaviour
             }
 
             yield return null; // 레이아웃 갱신 한 프레임 대기
+            LayoutRebuilder.ForceRebuildLayoutImmediate(contentParent); // 말풍선 배경이 줄바꿈된 텍스트 크기에 안 맞는 문제 방지 (강제 즉시 재계산)
+            RecenterInvite(); // 위 레이아웃 재계산 때마다 Content의 Padding Left 편향 때문에 Invite가 오른쪽으로 튕겨나가는 것 보정
+            lastBubble?.AlignProfileToBackground(); // 배경 크기가 실제로 반영된 다음에 계산해야 프사가 정확히 배경 꼭대기에 맞음
             ScrollToBottom();
 
             yield return new WaitForSeconds(item.delayAfter);
@@ -150,13 +167,17 @@ public class ChatManager : MonoBehaviour
             yield return PlayItems(reactionItems);
     }
 
-    private ChatBubbleView GetBubblePrefab(ChatItem item)
+    private bool IsConsecutive(ChatItem item)
     {
-        bool isConsecutive = previousMessageItem != null
+        return previousMessageItem != null
             && previousMessageItem.speaker == item.speaker
+            && previousMessageItem.speakerId == item.speakerId
             && previousMessageItem.contentType == BubbleContentType.Text
             && item.contentType == BubbleContentType.Text;
+    }
 
+    private ChatBubbleView GetBubblePrefab(ChatItem item, bool isConsecutive)
+    {
         if (item.contentType == BubbleContentType.Attachment)
             return item.speaker == ChatSpeaker.Player ? playerAttachmentBubble : otherAttachmentBubble;
 
@@ -166,6 +187,12 @@ public class ChatManager : MonoBehaviour
             return isConsecutive ? otherTextNoTailBubble : otherTextTailBubble;
     }
 
+    private Sprite FindPortrait(string speakerId)
+    {
+        var match = characterPortraits.Find(p => p.speakerId == speakerId);
+        return match?.portrait;
+    }
+
     private void UpdatePortrait(ChatItem item)
     {
         // 플레이어가 말할 땐 직전 상대방 초상화를 그대로 유지
@@ -173,12 +200,24 @@ public class ChatManager : MonoBehaviour
 
         if (portraitImage != null)
         {
-            var match = characterPortraits.Find(p => p.speakerId == item.speakerId);
-            if (match != null)
-                portraitImage.sprite = match.portrait;
+            var sprite = FindPortrait(item.speakerId);
+            if (sprite != null)
+                portraitImage.sprite = sprite;
         }
 
         groupIllustration?.Reveal(item.speakerId); // Day1 그룹 일러스트에 쓰는 경우 실루엣 자동 리빌
+    }
+
+    // Content의 Vertical Layout Group이 Padding Left/Right가 비대칭(초상화 자리 확보용)이라
+    // ChildAlignment=Center여도 말풍선들은 스크롤뷰 진짜 중앙이 아니라 그 패딩만큼 치우쳐서 배치됨.
+    // 패딩값으로 보정폭을 역산하는 대신, Content 폭의 정중앙으로 직접 못박음 (pivot 0.5 기준이라 이 값이 바로 중앙)
+    private void RecenterInvite()
+    {
+        if (inviteRectTransform == null) return;
+
+        var pos = inviteRectTransform.anchoredPosition;
+        pos.x = contentParent.rect.width / 2f;
+        inviteRectTransform.anchoredPosition = pos;
     }
 
     private void ScrollToBottom()

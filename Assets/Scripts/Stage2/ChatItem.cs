@@ -29,8 +29,8 @@ public class ChatItem
     // Invite용 텍스트는 위 text 필드를 그대로 사용
 
     [Header("Choice용")]
-    public List<ChatChoice> choices;
+    [System.NonSerialized] public List<ChatChoice> choices; // ChatChoice <-> ChatItem 상호 참조라 Unity 직렬화 대상에서 제외 (코드로만 채워서 씀)
 
     [Header("공통")]
-    public float delayAfter = 1f; // 이 메시지가 뜬 후 다음 메시지까지 대기시간
+    public float delayAfter = 2f; // 이 메시지가 뜬 후 다음 메시지까지 대기시간
 }

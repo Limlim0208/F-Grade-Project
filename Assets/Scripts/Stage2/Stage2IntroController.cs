@@ -2,13 +2,18 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // Stage2 Day1 인트로 데모용 컨트롤러
-// 초대 알림 -> 자기소개 -> 선택지 -> 반응 -> 개발중 팝업 -> StartScene 이동
+// 초대 알림 -> 자기소개 -> 개발중 팝업 -> StartScene 이동 (선택지는 시간 관계상 생략)
 public class Stage2IntroController : MonoBehaviour
 {
     [SerializeField] private ChatManager chatManager;
+    [SerializeField] private DateDividerView dayBadge; // 화면에 고정으로 떠있는 "DAY 1" 배지 (채팅 스크롤과 무관)
 
     void Start()
     {
+        BGMManager.GetInstance().PlayBGM("stage2");
+
+        dayBadge?.SetDate("DAY 1");
+        dayBadge?.SetDeadline(6);
         chatManager.PlayChat(BuildDay1Items(), ShowDevPopup);
     }
 
@@ -22,11 +27,6 @@ public class Stage2IntroController : MonoBehaviour
             {
                 itemType = ChatItemType.Invite,
                 text = $"<u>{playerName}</u>님이 <u>A</u>님, <u>B</u>님, <u>C</u>님을 초대했습니다."
-            },
-            new ChatItem
-            {
-                itemType = ChatItemType.DateDivider,
-                dateLabel = "DAY 1"
             },
             new ChatItem
             {
@@ -44,40 +44,7 @@ public class Stage2IntroController : MonoBehaviour
             {
                 speaker = ChatSpeaker.Other,
                 speakerId = "B",
-                text = "안녕하세요!! B입니다"
-            },
-            new ChatItem
-            {
-                speaker = ChatSpeaker.Other,
-                speakerId = "B",
-                text = "같이 팀플하게 돼서 너무 다행이에요! 잘 부탁드려요ㅎㅎ"
-            },
-            new ChatItem
-            {
-                itemType = ChatItemType.Choice,
-                choices = new List<ChatChoice>
-                {
-                    new ChatChoice
-                    {
-                        choiceText = "다들 원하시는 역할 있으신가요?",
-                        reactionItems = new List<ChatItem>
-                        {
-                            new ChatItem { speaker = ChatSpeaker.Player, text = "다들 원하시는 역할 있으신가요?" },
-                            new ChatItem { speaker = ChatSpeaker.Other, speakerId = "C", text = "저는 자료조사할게요" },
-                            new ChatItem { speaker = ChatSpeaker.Other, speakerId = "A", text = "제가 PPT 만들게요" },
-                        }
-                    },
-                    new ChatChoice
-                    {
-                        choiceText = "C님이 PPT, A님이 자료조사, B님이 최종 정리 맡아주세요..!",
-                        reactionItems = new List<ChatItem>
-                        {
-                            new ChatItem { speaker = ChatSpeaker.Player, text = "C님이 PPT, A님이 자료조사, B님이 최종 정리 맡아주세요..!" },
-                            new ChatItem { speaker = ChatSpeaker.Other, speakerId = "C", text = "네 알겠습니다" },
-                            new ChatItem { speaker = ChatSpeaker.Other, speakerId = "A", text = "넵 ㅎㅎ" },
-                        }
-                    }
-                }
+                text = "안녕하세요!! B입니다. 같이 팀플하게 돼서 너무 다행이에요! 잘 부탁드려요ㅎㅎ"
             }
         };
 

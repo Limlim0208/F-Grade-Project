@@ -4835,6 +4835,7 @@ GameObject:
   - component: {fileID: 1585727728}
   - component: {fileID: 1585727727}
   - component: {fileID: 1585727726}
+  - component: {fileID: 1585727729}
   m_Layer: 5
   m_Name: back-btn
   m_TagString: Untagged
@@ -4904,7 +4905,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1585727727}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1585727729}
+        m_TargetAssemblyTypeName: SceneChangeButton, Assembly-CSharp
+        m_MethodName: OnClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1585727727
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4943,6 +4956,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1585727724}
   m_CullTransparentMesh: 1
+--- !u!114 &1585727729
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1585727724}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2350c61522c8ce4aaa844de3c4a392c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneName: StageSelectScene
+  stageId: -1
 --- !u!1 &1617057102
 GameObject:
   m_ObjectHideFlags: 0
@@ -6395,7 +6422,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1903204828
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6413,7 +6440,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 581, y: -39.10501}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 339.42, y: 78.21}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1903204829
 MonoBehaviour:

@@ -13,9 +13,15 @@ public class SFXManager : MonoBehaviour
         return Instance;
     }
 
+    // 임유미 추가: 2026-08-23
+    private const string VolumePrefKey = "SFXVolume";
+
     private AudioSource sfxSource;
     private bool clickRequestedThisFrame = false;
     private bool suppressClickThisFrame = false;
+
+    // 임유미 추가: 2026-08-23
+    public float CurrentSFXVolume => sfxSource != null ? sfxSource.volume : PlayerPrefs.GetFloat(VolumePrefKey, 1f);
 
     void Awake()
     {
@@ -27,6 +33,7 @@ public class SFXManager : MonoBehaviour
             sfxSource = gameObject.AddComponent<AudioSource>();
             sfxSource.loop = false;
             sfxSource.playOnAwake = false;
+            sfxSource.volume = PlayerPrefs.GetFloat(VolumePrefKey, 1f);
         }
         else
         {
@@ -78,6 +85,9 @@ public class SFXManager : MonoBehaviour
 
     public void SetVolume(float volume)
     {
-        sfxSource.volume = Mathf.Clamp01(volume);
+        volume = Mathf.Clamp01(volume);
+        sfxSource.volume = volume;
+        PlayerPrefs.SetFloat(VolumePrefKey, volume);
+        PlayerPrefs.Save();
     }
 }

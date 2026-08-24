@@ -14,8 +14,14 @@ public class BGMManager : MonoBehaviour
         return Instance;
     }
 
+    // 임유미 추가: 2026-08-23
+    private const string VolumePrefKey = "BGMVolume";
+
     private AudioSource audioSource;
     private string currentClipName;
+
+    // 임유미 추가: 2026-08-23
+    public float CurrentBGMVolume => audioSource != null ? audioSource.volume : PlayerPrefs.GetFloat(VolumePrefKey, 1f);
 
     void Awake()
     {
@@ -27,6 +33,7 @@ public class BGMManager : MonoBehaviour
             audioSource = gameObject.AddComponent<AudioSource>();
             audioSource.loop = true;
             audioSource.playOnAwake = false;
+            audioSource.volume = PlayerPrefs.GetFloat(VolumePrefKey, 1f);
 
             SceneManager.sceneLoaded += OnSceneLoaded;
         }
@@ -74,7 +81,10 @@ public class BGMManager : MonoBehaviour
 
     public void SetVolume(float volume)
     {
-        audioSource.volume = Mathf.Clamp01(volume);
+        volume = Mathf.Clamp01(volume);
+        audioSource.volume = volume;
+        PlayerPrefs.SetFloat(VolumePrefKey, volume);
+        PlayerPrefs.Save();
     }
 
     // 현재 재생 중인 곡의 재생 위치를 seconds만큼 앞으로 건너뜀

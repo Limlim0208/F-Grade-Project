@@ -66,6 +66,12 @@ public class ServerClockManager : MonoBehaviour
     void OnEnable()
     {
         GameManager.OnGameStateChanged += HandleGameStateChanged;
+
+        // 구독 시점에 이미 Playing 상태라면 (이벤트를 놓친 경우) 즉시 시작
+        if (GameManager.GetInstance().CurrentState == GameManager.GameState.Playing)
+        {
+            StartClock();
+        }
     }
 
     void OnDisable()

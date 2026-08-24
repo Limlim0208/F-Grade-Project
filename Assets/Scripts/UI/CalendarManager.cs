@@ -3,30 +3,48 @@ using UnityEngine.UI;
 
 public class CalendarManager : MonoBehaviour
 {
-    [Header("Month Selector (µ¿Àû »ı¼º)")]
+    [Header("Month Selector (ë‹¬ë ¥ ìƒë‹¨)")]
     [SerializeField] private Transform monthButtonContainer;
     [SerializeField] private GameObject monthButtonPrefab;
     [SerializeField] private ToggleGroup monthToggleGroup;
 
-    [Header("Month Panels (¾À¿¡ 12°³ ¹Ì¸® ¹èÄ¡, ÀÌ¹ÌÁö + ÀÌº¥Æ® ¹Ù ÀüºÎ ¼ÕÀ¸·Î ±¸¼º)")]
+    [Header("Month Panels (index 12ê°œ ë¯¸ë¦¬ ë°°ì¹˜, ì´ë¯¸ì§€ + ì´ë²¤íŠ¸ ë“± ê°ê° ë‹¤ë¥´ê²Œ êµ¬ì„±)")]
     [SerializeField] private GameObject[] monthPanels = new GameObject[12];
 
-    [Header("Month Labels (¹öÆ° ÅØ½ºÆ®)")]
+    [Header("Month Labels (ë²„íŠ¼ í…ìŠ¤íŠ¸)")]
     [SerializeField]
     private string[] monthLabels =
     {
-        "1¿ù", "2¿ù", "3¿ù", "4¿ù", "5¿ù", "6¿ù",
-        "7¿ù", "8¿ù", "9¿ù", "10¿ù", "11¿ù", "12¿ù"
+        "1ì›”", "2ì›”", "3ì›”", "4ì›”", "5ì›”", "6ì›”",
+        "7ì›”", "8ì›”", "9ì›”", "10ì›”", "11ì›”", "12ì›”"
     };
+
+    // ìŠ¤í…Œì´ì§€ ë²ˆí˜¸(CurrentStage) -> ë³´ì—¬ì¤„ ë‹¬ ì¸ë±ìŠ¤(0=1ì›”) ë§¤í•‘
+    // ì˜ˆ: ìŠ¤í…Œì´ì§€0 -> 1ì›”, ìŠ¤í…Œì´ì§€1 -> 2ì›”, ìŠ¤í…Œì´ì§€2 -> 4ì›”
+    [Header("Stage -> Month ë§¤í•‘")]
+    [SerializeField]
+    private int[] stageToMonthIndex = { 0, 1, 3 };
 
     void Start()
     {
         GenerateMonthButtons();
-        SelectMonth(0);
+    }
+
+    private int GetInitialMonthIndex()
+    {
+        int currentStage = StageProgressManager.GetInstance().CurrentStage;
+
+        if (stageToMonthIndex == null || stageToMonthIndex.Length == 0)
+            return 0;
+
+        int clampedStage = Mathf.Clamp(currentStage, 0, stageToMonthIndex.Length - 1);
+        return stageToMonthIndex[clampedStage];
     }
 
     private void GenerateMonthButtons()
     {
+        int initialMonth = GetInitialMonthIndex();
+
         for (int index = 0; index < monthLabels.Length; index++)
         {
             GameObject buttonObj = Instantiate(monthButtonPrefab, monthButtonContainer);
@@ -38,7 +56,7 @@ public class CalendarManager : MonoBehaviour
             Toggle toggle = buttonObj.GetComponent<Toggle>();
             if (toggle == null)
             {
-                Debug.LogError("[CalendarManager] monthButtonPrefab¿¡ Toggle ÄÄÆ÷³ÍÆ®°¡ ¾ø½À´Ï´Ù.");
+                Debug.LogError("[CalendarManager] monthButtonPrefabì— Toggle ì»´í¬ë„ŒíŠ¸ê°€ ì—†ìŠµë‹ˆë‹¤.");
                 continue;
             }
 
@@ -50,12 +68,12 @@ public class CalendarManager : MonoBehaviour
                 if (isOn) SelectMonth(capturedIndex);
             });
 
-            if (index == 0)
+            if (index == initialMonth)
                 toggle.isOn = true;
         }
     }
 
-    // ¼±ÅÃµÈ ¿ù ÆĞ³Î¸¸ ÄÑ°í ³ª¸ÓÁö´Â ÀüºÎ ²û
+    // ì„ íƒëœ ë‹¬ íŒ¨ë„ë§Œ ì¼œê³  ë‚˜ë¨¸ì§€ëŠ” ë„ê¸°
     public void SelectMonth(int monthIndex)
     {
         for (int index = 0; index < monthPanels.Length; index++)

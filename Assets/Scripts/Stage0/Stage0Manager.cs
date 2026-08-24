@@ -62,6 +62,7 @@ public class Stage00Manager : MonoBehaviour
             return;
         }
 
+        PlayerDataManager.GetInstance().SetPlayerName(nameInput.text); // 나중 스테이지에서 사용할 닉네임 저장
         examSearchCompletePopupCaller.ShowPopup(); // 팝업 확인 클릭 시 수험번호 생성 + 로직 시작 (ExamSearchCompletePopupCaller에서 처리)
     }
 }

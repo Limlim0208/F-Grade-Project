@@ -558,7 +558,6 @@ GameObject:
   m_Component:
   - component: {fileID: 99296720}
   - component: {fileID: 99296719}
-  - component: {fileID: 99296721}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -593,18 +592,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &99296721
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 99296718}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 412e26ca00193c546989aa9f91ae8f0b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &116060313
 GameObject:
   m_ObjectHideFlags: 0
@@ -2646,6 +2633,50 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 557cf77aa90c5524b90e0c7ccf2baae0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &627831336
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 627831338}
+  - component: {fileID: 627831337}
+  m_Layer: 0
+  m_Name: BGMPlayer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &627831337
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 627831336}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 412e26ca00193c546989aa9f91ae8f0b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &627831338
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 627831336}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.7599034, y: 3.0284925, z: 0.6001785}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!224 &630084129 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6019348822625637598, guid: df9dbeef5da9dcc41a733ee7fe57934b, type: 3}
@@ -10057,7 +10088,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1180962076711953205, guid: 76ce0204ac121fc47b19e25d2d3b0057, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 124.48
       objectReference: {fileID: 0}
     - target: {fileID: 1180962076711953205, guid: 76ce0204ac121fc47b19e25d2d3b0057, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -10077,7 +10108,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2257309730455406527, guid: 76ce0204ac121fc47b19e25d2d3b0057, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 124.48
       objectReference: {fileID: 0}
     - target: {fileID: 2257309730455406527, guid: 76ce0204ac121fc47b19e25d2d3b0057, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -10113,7 +10144,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2336802494126619820, guid: 76ce0204ac121fc47b19e25d2d3b0057, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 173.52
       objectReference: {fileID: 0}
     - target: {fileID: 2336802494126619820, guid: 76ce0204ac121fc47b19e25d2d3b0057, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -10233,7 +10264,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4303668204570641753, guid: 76ce0204ac121fc47b19e25d2d3b0057, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 62.24
       objectReference: {fileID: 0}
     - target: {fileID: 4303668204570641753, guid: 76ce0204ac121fc47b19e25d2d3b0057, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -10253,7 +10284,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5023064250321918991, guid: 76ce0204ac121fc47b19e25d2d3b0057, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 124.48
       objectReference: {fileID: 0}
     - target: {fileID: 5023064250321918991, guid: 76ce0204ac121fc47b19e25d2d3b0057, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -10311,3 +10342,4 @@ SceneRoots:
   - {fileID: 1398009807}
   - {fileID: 99296720}
   - {fileID: 1601295282}
+  - {fileID: 627831338}

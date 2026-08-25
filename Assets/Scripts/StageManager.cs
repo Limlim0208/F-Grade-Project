@@ -68,7 +68,9 @@ public class StageProgressManager : MonoBehaviour
     // 스테이지 0부터 시작, CurrentStage까지(포함) 진입 가능
     public bool IsStageUnlocked(int stageId)
     {
-        return stageId <= CurrentStage;
+        //return stageId <= CurrentStage;
+
+        return true;
     }
 
 }

@@ -6911,8 +6911,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   timerText: {fileID: 16637004}
   colorPanel: {fileID: 395894654}
-  randomStartMinSecondsBeforeTarget: 150
-  randomStartMaxSecondsBeforeTarget: 180
+  randomStartMinSecondsBeforeTarget: 90
+  randomStartMaxSecondsBeforeTarget: 120
 --- !u!1 &1298380293
 GameObject:
   m_ObjectHideFlags: 0

@@ -19,50 +19,40 @@ public class DraggablePanel : MonoBehaviour, IPointerDownHandler, IDragHandler
     public void OnPointerDown(PointerEventData eventData)
     {
         RectTransformUtility.ScreenPointToLocalPointInRectangle(
-            panelRect.parent as RectTransform,
-            eventData.position,
-            eventData.pressEventCamera,
-            out Vector2 localPoint
-        );
-        dragOffset = panelRect.anchoredPosition - localPoint;
+            parentRect, eventData.position, eventData.pressEventCamera, out Vector2 localPoint);
+        dragOffset = (Vector2)panelRect.localPosition - localPoint;
     }
 
     public void OnDrag(PointerEventData eventData)
     {
         RectTransformUtility.ScreenPointToLocalPointInRectangle(
-            panelRect.parent as RectTransform,
-            eventData.position,
-            eventData.pressEventCamera,
-            out Vector2 localPoint
-        );
+            parentRect, eventData.position, eventData.pressEventCamera, out Vector2 localPoint);
         Vector2 targetPos = localPoint + dragOffset;
 
-        Vector2 parentSize = parentRect.rect.size;
-        Vector2 panelSize = panelRect.rect.size;
+        Rect pr = parentRect.rect;
+        Vector2 size = panelRect.rect.size;
+        Vector2 pivot = panelRect.pivot;
 
-        // 상단: panelRect 기준, 화면 위로 이탈 불가 (기존과 동일)
-        float maxY = parentSize.y / 2 - panelSize.y / 2;
+        // 상단: 패널 윗변이 부모 윗변을 넘지 않게
+        float maxY = pr.yMax - size.y * (1f - pivot.y);
         targetPos.y = Mathf.Min(targetPos.y, maxY);
 
-        // 좌/우: panelRect 기준, minVisibleWidth만 화면에 걸치면 됨
-        float minX = -parentSize.x / 2 + minVisibleWidth - panelSize.x / 2;
-        float maxX = parentSize.x / 2 - minVisibleWidth + panelSize.x / 2;
+        // 좌우: 패널이 minVisibleWidth 이상 화면에 걸치게
+        float minX = pr.xMin + minVisibleWidth - size.x * (1f - pivot.x);
+        float maxX = pr.xMax - minVisibleWidth + size.x * pivot.x;
         targetPos.x = Mathf.Clamp(targetPos.x, minX, maxX);
 
-        // 하단: selfRect(스크립트 붙은 오브젝트)의 높이만큼만 화면 안에 있으면 됨
-        float deltaY = targetPos.y - panelRect.anchoredPosition.y;
+        // 하단: selfRect 하단이 부모 하단 아래로 내려가지 않게
+        float deltaY = targetPos.y - panelRect.localPosition.y;
 
-        Vector3[] selfCorners = new Vector3[4];
-        selfRect.GetWorldCorners(selfCorners); // 0번 = 좌하단(bottom-left)
-        float selfBottomLocalY = parentRect.InverseTransformPoint(selfCorners[0]).y;
-        float projectedSelfBottomY = selfBottomLocalY + deltaY;
+        Vector3[] corners = new Vector3[4];
+        selfRect.GetWorldCorners(corners);
+        float selfBottomY = parentRect.InverseTransformPoint(corners[0]).y;
 
-        float parentBottomY = -parentSize.y / 2;
-        if (projectedSelfBottomY < parentBottomY)
-        {
-            targetPos.y += parentBottomY - projectedSelfBottomY; // 부족한 만큼 위로 보정
-        }
+        float projected = selfBottomY + deltaY;
+        if (projected < pr.yMin)
+            targetPos.y += pr.yMin - projected;
 
-        panelRect.anchoredPosition = targetPos;
+        panelRect.localPosition = new Vector3(targetPos.x, targetPos.y, panelRect.localPosition.z);
     }
 }

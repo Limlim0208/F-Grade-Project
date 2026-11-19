@@ -5,30 +5,26 @@ using System.Collections;
 
 public class LoginManager : MonoBehaviour
 {
-    [Header("�Է� �ʵ�")]
+    [Header("입력 필드")]
     public TMP_InputField studentIdField;
     public TMP_InputField passwordField;
 
-    [Header("��ư")]
+    [Header("버튼")]
     public Button loginButton;
 
-    // [Header("�˸� �˾�")]
-    // public GameObject alertPanel;
-    // public TMP_Text alertText;
-
-    [Header("����")]
+    [Header("팝업")]
     public GameObject inputPopup;
     public Image overlayImage;
     public GameObject checkboxPopup;
     public GameObject minigamePopup;
 
-    [Header("üũ�ڽ�")]
+    [Header("체크박스")]
     public Toggle robotCheckbox;
     public Image checkboxBackground;
 
     private const string CORRECT_PASSWORD = "0318";
 
-    void Start()
+    private void Start()
     {
         studentIdField.contentType = TMP_InputField.ContentType.IntegerNumber;
         studentIdField.onValidateInput += ValidateNumberOnly;
@@ -39,53 +35,82 @@ public class LoginManager : MonoBehaviour
 
         BGMManager.GetInstance().PlayBGM("stage1_bgm");
 
-        // alertPanel.SetActive(false);
         overlayImage.gameObject.SetActive(false);
         checkboxPopup.SetActive(false);
         minigamePopup.SetActive(false);
     }
 
-    char ValidateNumberOnly(string text, int charIndex, char addedChar)
+    private char ValidateNumberOnly(string text, int charIndex, char addedChar)
     {
         if (char.IsDigit(addedChar)) return addedChar;
         return '\0';
     }
 
-    void OnLoginClicked()
+    private void OnLoginClicked()
     {
         string studentId = studentIdField.text.Trim();
         string password = passwordField.text.Trim();
 
-        if (string.IsNullOrEmpty(studentId) || password != CORRECT_PASSWORD)
+        // 1. 학번 미입력
+        if (string.IsNullOrEmpty(studentId))
         {
-            StartCoroutine(ShowAlertAndReturn());
+            ShowErrorPopup(
+                "로그인 실패",
+                "학번을 입력해주세요.",
+                () => studentIdField.ActivateInputField()
+            );
+            return;
+        }
+
+        // 2. 비밀번호 불일치
+        if (password != CORRECT_PASSWORD)
+        {
+            ShowErrorPopup(
+                "로그인 실패",
+                "비밀번호가 틀렸습니다.",
+                () =>
+                {
+                    passwordField.text = string.Empty;
+                    passwordField.ActivateInputField();
+                }
+            );
             return;
         }
 
         OnLoginSuccess();
     }
 
-    IEnumerator ShowAlertAndReturn()
+    private void ShowErrorPopup(string title, string content, System.Action onConfirm)
     {
-        // alertText.text = "�ùٸ� ��й�ȣ�� �Է��ϼ���.";
-        // alertPanel.SetActive(true);
-        // yield return new WaitForSeconds(2f);
-        // alertPanel.SetActive(false);
-
         SFXManager.GetInstance().PlaySFX("error");
 
-        yield return null;
-        SceneChanger.Instance.LoadScene("StageSelectScene");
+        var info = new PopupInfo.Builder()
+            .SetTitle(title)
+            .SetContent(content)
+            .SetButtons(Enums.PopupButtonType.Confirm)
+            .SetListener((type) =>
+            {
+                switch (type)
+                {
+                    case Enums.PopupButtonType.Confirm:
+                        PopupManager.Instance.CloseCurrentActivePopup();
+                        onConfirm?.Invoke();
+                        break;
+                }
+            })
+            .Build();
+
+        PopupManager.Instance.ShowPopup(info);
     }
 
-    void OnLoginSuccess()
+    private void OnLoginSuccess()
     {
         inputPopup.SetActive(false);
         overlayImage.gameObject.SetActive(true);
         StartCoroutine(ShowCheckboxAfterDelay());
     }
 
-    IEnumerator ShowCheckboxAfterDelay()
+    private IEnumerator ShowCheckboxAfterDelay()
     {
         yield return new WaitForSeconds(0.5f);
         checkboxPopup.SetActive(true);
@@ -94,7 +119,7 @@ public class LoginManager : MonoBehaviour
         robotCheckbox.onValueChanged.AddListener(OnToggleChanged);
     }
 
-    void OnToggleChanged(bool isOn)
+    private void OnToggleChanged(bool isOn)
     {
         checkboxBackground.enabled = !isOn;
 
@@ -104,7 +129,7 @@ public class LoginManager : MonoBehaviour
         }
     }
 
-    IEnumerator ShowMinigameAfterDelay()
+    private IEnumerator ShowMinigameAfterDelay()
     {
         yield return new WaitForSeconds(1f);
         checkboxPopup.SetActive(false);

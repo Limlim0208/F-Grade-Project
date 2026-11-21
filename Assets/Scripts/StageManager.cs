@@ -4,8 +4,9 @@ public class StageProgressManager : MonoBehaviour
 {
     public static StageProgressManager Instance { get; private set; }
 
-    public int CurrentStage { get; private set; } = 0; // 스테이지 번호 0으로 초기화
-    public int TotalStages { get; private set; } = 5; // 마지막 스테이지 번호
+    //public int CurrentStage { get; private set; } = 0; // 스테이지 번호 0으로 초기화
+    public int CurrentStage { get; private set; } = 2; // 테스트코드
+    public int TotalStages { get; private set; } = 2; // 마지막 스테이지 번호
 
     void Awake()
     {
@@ -67,7 +68,9 @@ public class StageProgressManager : MonoBehaviour
     // 스테이지 0부터 시작, CurrentStage까지(포함) 진입 가능
     public bool IsStageUnlocked(int stageId)
     {
-        return stageId <= CurrentStage;
+        //return stageId <= CurrentStage;
+
+        return true;
     }
 
 }

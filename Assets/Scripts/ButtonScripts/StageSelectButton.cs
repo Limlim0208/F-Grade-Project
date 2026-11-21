@@ -73,6 +73,7 @@ public class StageSelectButton : MonoBehaviour
                 {
                     case Enums.PopupButtonType.Yes:
                         PopupManager.Instance.CloseCurrentActivePopup();
+                        GameManager.GetInstance().StartGame(); // game state 변경
                         sceneChangeButton.OnClick(); // 실제 이동은 SceneChangeButton에 위임
                         break;
 

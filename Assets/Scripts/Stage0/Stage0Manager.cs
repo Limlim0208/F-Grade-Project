@@ -38,6 +38,11 @@ public class Stage00Manager : MonoBehaviour
         warningConfirmButton1.onClick.AddListener(() => warningPopup.SetActive(false));
         warningConfirmButton2.onClick.AddListener(() => warningPopup.SetActive(false));
         examNumberInput.interactable = false; // 수험번호 직접 입력 불가
+
+        // 생년월일은 숫자만, 8자리까지만 입력 가능
+        birthInput.contentType = TMP_InputField.ContentType.Custom;
+        birthInput.characterValidation = TMP_InputField.CharacterValidation.Digit;
+        birthInput.characterLimit = 8;
     }
 
     void HandleGameStateChanged(GameManager.GameState previous, GameManager.GameState current)

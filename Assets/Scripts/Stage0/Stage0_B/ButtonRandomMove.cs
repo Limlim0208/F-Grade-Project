@@ -15,6 +15,7 @@ public class ButtonRandomMove : MonoBehaviour, IPointerClickHandler
     [SerializeField] private int randomMoveCount = 3;
     [SerializeField] private int clicksToDisappear = 5;
     [SerializeField] private float timePenalty = 10f; // 감점될 시간
+    [SerializeField] private float blinkDuration = 0.15f; // 간판이 꺼져 있는 시간 
 
     private RectTransform rectTransform;
     private Canvas canvas;
@@ -111,6 +112,7 @@ public class ButtonRandomMove : MonoBehaviour, IPointerClickHandler
                 rectTransform.position = logicB.position + (Vector3)hideOffset; // LogicB 오브젝트 뒤에 숨는 위치로 이동
                 isHiding = true;
                 isActive = false;
+                StartCoroutine(BlinkSignboard()); // 버튼이 사라지는 순간 간판 한 번 깜빡임
             }
             return;
         }
@@ -129,6 +131,16 @@ public class ButtonRandomMove : MonoBehaviour, IPointerClickHandler
                 GameManager.GetInstance().OnStageClear();
             }
         }
+    }
+
+    // 간판을 한번 깜빡이게 함
+    private System.Collections.IEnumerator BlinkSignboard()
+    {
+        if (logicBImage == null) yield break;
+
+        logicBImage.enabled = false;
+        yield return new WaitForSeconds(blinkDuration);
+        logicBImage.enabled = true;
     }
 
     private void OnLogicBClicked()

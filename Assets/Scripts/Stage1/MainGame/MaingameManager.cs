@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 public class MainGameManager : MonoBehaviour
 {
@@ -16,9 +17,17 @@ public class MainGameManager : MonoBehaviour
     [Header("메인게임 UI 참조")]
     [SerializeField] private GameObject mainGameRoot; // 메인게임 전체를 켜고 끌 루트 오브젝트
 
-    public bool IsMainGameActive { get; private set; }
+    [Header("랜덤 셧다운")]
+    [SerializeField] private GameObject shutdownScreen;   // 메인게임 위에 덮을 셧다운 화면
+    [SerializeField] private float minShutdownDelay = 10f;
+    [SerializeField] private float maxShutdownDelay = 20f;
 
-    void Awake()
+    public bool IsMainGameActive { get; private set; }
+    public bool IsShutdownActive => shutdownScreen != null && shutdownScreen.activeInHierarchy;
+
+    private Coroutine shutdownRoutine;
+
+    private void Awake()
     {
         if (Instance == null)
             Instance = this;
@@ -26,8 +35,7 @@ public class MainGameManager : MonoBehaviour
             Destroy(gameObject);
     }
 
-    /// 미니게임(수강신청 준비 미니게임 등) 종료 후 MinigameManager가 호출.
-    /// 메인게임(수강신청 화면 등) 진입 트리거.
+    /// 서버 대기가 끝난 뒤 ServerWaitingPopup이 호출.
     public void StartMainGame()
     {
         if (mainGameRoot != null)
@@ -36,22 +44,62 @@ public class MainGameManager : MonoBehaviour
         IsMainGameActive = true;
 
         Debug.Log("[MainGameManager] 메인게임 시작됨");
+
+        StartRandomShutdownTimer();
+    }
+
+    private void StartRandomShutdownTimer()
+    {
+        StopShutdownTimer();
+
+        if (shutdownScreen == null)
+        {
+            Debug.LogWarning("[MainGameManager] shutdownScreen이 Inspector에 연결되어 있지 않아 셧다운 타이머를 시작하지 않습니다.");
+            return;
+        }
+
+        shutdownRoutine = StartCoroutine(RandomShutdownRoutine());
+    }
+
+    private IEnumerator RandomShutdownRoutine()
+    {
+        float delay = Random.Range(minShutdownDelay, maxShutdownDelay);
+        Debug.Log($"[MainGameManager] 랜덤 셧다운 타이머 설정: {delay:F1}초 후 셧다운");
+
+        yield return new WaitForSeconds(delay);
+
+        shutdownRoutine = null;
+
+        // 메인게임이 이미 끝났으면 셧다운을 띄우지 않는다
+        if (!IsMainGameActive) yield break;
+
+        shutdownScreen.SetActive(true);
     }
 
     public void OnMainGameSuccess()
     {
         IsMainGameActive = false;
+        StopShutdownTimer();
 
         Debug.Log("[MainGameManager] 메인게임 성공");
         GameManager.GetInstance().OnStageClear();
-
     }
 
     public void OnMainGameFail()
     {
         IsMainGameActive = false;
+        StopShutdownTimer();
 
         Debug.Log("[MainGameManager] 메인게임 실패");
         GameManager.GetInstance().OnGameOver();
+    }
+
+    private void StopShutdownTimer()
+    {
+        if (shutdownRoutine != null)
+        {
+            StopCoroutine(shutdownRoutine);
+            shutdownRoutine = null;
+        }
     }
 }

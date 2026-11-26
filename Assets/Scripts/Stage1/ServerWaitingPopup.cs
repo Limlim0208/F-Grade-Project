@@ -66,6 +66,8 @@ public class ServerWaitingPopup : MonoBehaviour
 
         waitingRoutine = null;
         gameObject.SetActive(false);
+
+        MainGameManager.GetInstance().StartMainGame();
     }
 
     private void UpdateTexts(int seconds, int peopleCount)

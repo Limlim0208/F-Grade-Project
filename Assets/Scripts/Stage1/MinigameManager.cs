@@ -6,6 +6,7 @@ using System.Collections;
 public class MinigameManager : MonoBehaviour
 {
     public static MinigameManager Instance;
+    public GameObject serverWaitingPopup;
 
     [Header("참조")]
     public IconSpawner spawner;
@@ -65,9 +66,7 @@ public class MinigameManager : MonoBehaviour
         verifiedPopup.SetActive(true);
         yield return new WaitForSeconds(2f);
         verifiedPopup.SetActive(false);
-        overlayImage.SetActive(false);   // 추가
-        shutdown.SetActive(true);
-
-        MainGameManager.GetInstance().StartMainGame(); // 추가: 미니게임 종료 → 메인게임 호출
+        overlayImage.SetActive(false);
+        serverWaitingPopup.SetActive(true);
     }
 }

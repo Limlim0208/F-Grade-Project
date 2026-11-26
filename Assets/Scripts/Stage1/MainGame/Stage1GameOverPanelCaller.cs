@@ -40,9 +40,6 @@ public class Stage1GameOverPanelCaller : MonoBehaviour
 
     private void OnConfirmButtonClicked()
     {
-        if (gameOverPanel != null)
-            //gameOverPanel.SetActive(false);
-
         StageProgressManager.GetInstance().OnStageFailed();
     }
 }

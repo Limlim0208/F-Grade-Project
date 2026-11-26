@@ -7,7 +7,7 @@ public class ButtonRandomMove : MonoBehaviour, IPointerClickHandler
     [Header("숨을 위치 오브젝트")]
     [SerializeField] private RectTransform logicB;
     [SerializeField] private Vector2 hideOffset = Vector2.zero;
-    [SerializeField] private GameObject headerPlaying; // LogicB 켜질 때 꺼지고, 꺼질 때 다시 켜지는 기존 헤더
+    [SerializeField] private GameObject headerPlaying; 
     [Header("부서지는 이미지 (img_signboard 기본 -> _1~_5 순서)")]
     [SerializeField] private Image logicBImage;
     [SerializeField] private Sprite[] crackedSprites;
@@ -15,6 +15,8 @@ public class ButtonRandomMove : MonoBehaviour, IPointerClickHandler
     [SerializeField] private int randomMoveCount = 3;
     [SerializeField] private int clicksToDisappear = 5;
     [SerializeField] private float timePenalty = 10f; // 감점될 시간
+    [SerializeField] private Color signboardBackgroundColor = new Color32(35, 57, 203, 255); 
+    [SerializeField] private float blinkDuration = 0.15f; // 간판이 꺼져 있는 시간 
 
     private RectTransform rectTransform;
     private Canvas canvas;
@@ -111,6 +113,7 @@ public class ButtonRandomMove : MonoBehaviour, IPointerClickHandler
                 rectTransform.position = logicB.position + (Vector3)hideOffset; // LogicB 오브젝트 뒤에 숨는 위치로 이동
                 isHiding = true;
                 isActive = false;
+                StartCoroutine(BlinkSignboard()); // 버튼이 사라지는 순간 간판 한 번 깜빡임
             }
             return;
         }
@@ -131,6 +134,23 @@ public class ButtonRandomMove : MonoBehaviour, IPointerClickHandler
         }
     }
 
+    // 간판 로고만 한 번 깜빡이게 함 
+    private System.Collections.IEnumerator BlinkSignboard()
+    {
+        if (logicBImage == null) yield break;
+
+        Sprite originalSprite = logicBImage.sprite;
+        Color originalColor = logicBImage.color;
+
+        logicBImage.sprite = null;
+        logicBImage.color = signboardBackgroundColor;
+
+        yield return new WaitForSeconds(blinkDuration);
+
+        logicBImage.sprite = originalSprite;
+        logicBImage.color = originalColor;
+    }
+
     private void OnLogicBClicked()
     {
         if (!isHiding) return;
@@ -147,7 +167,16 @@ public class ButtonRandomMove : MonoBehaviour, IPointerClickHandler
         if (logicBClickCount >= clicksToDisappear)
         {
             logicB.gameObject.SetActive(false);
-            if (headerPlaying != null) headerPlaying.SetActive(true); // 기존 헤더 다시 켜기
+            if (headerPlaying != null)
+            {
+                var headerImage = headerPlaying.GetComponent<Image>();
+                if (headerImage != null)
+                {
+                    headerImage.sprite = null;
+                    headerImage.color = signboardBackgroundColor;
+                }
+                headerPlaying.SetActive(true); // 기존 헤더 다시 켜기
+            }
             isHiding = false;
             isRevealed = true;
         }

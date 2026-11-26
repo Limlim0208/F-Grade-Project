@@ -21,7 +21,7 @@ public class TimerManager : MonoBehaviour
 
     // 타이머를 사용하지 않는 씬 목록 (GameManager와 연동하지 않아주세요)
     [SerializeField]
-    private string[] scenesWithoutTimer = { "StartScene", "StageSelectScene" };
+    private string[] scenesWithoutTimer = { "StartScene", "StageSelectScene", "Stage_01" };
 
     void Awake()
     {

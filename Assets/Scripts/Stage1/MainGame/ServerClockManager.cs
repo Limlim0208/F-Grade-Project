@@ -34,8 +34,8 @@ public class ServerClockManager : MonoBehaviour
 
     [Header("랜덤 시작 범위 (목표 시각 기준 몇 초 전 ~ 몇 초 전)")]
     [Tooltip("예: 100~160 = 08:58:20 ~ 08:57:20 사이 랜덤 시작 (09:00:00 기준)")]
-    [SerializeField] private float randomStartMinSecondsBeforeTarget = 240f;
-    [SerializeField] private float randomStartMaxSecondsBeforeTarget = 300f;
+    [SerializeField] private float randomStartMinSecondsBeforeTarget = 90f;
+    [SerializeField] private float randomStartMaxSecondsBeforeTarget = 120f;
 
     // "경고 색상 그라데이션
     private float warningStartSecondsBeforeTarget = 10f; // 목표 10초 전부터 그라데이션 시작
